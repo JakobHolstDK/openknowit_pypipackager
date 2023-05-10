@@ -1,0 +1,2 @@
+export DOWNLOAD_FOLDER="./source"
+export MONGO="mongodb://localhost:27017/"
