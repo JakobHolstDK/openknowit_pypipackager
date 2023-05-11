@@ -61,7 +61,7 @@ def createsetuppyfrompyprojecttoml(name, version):
         else:
           project_version = version
         if 'description' in config['project']:
-          
+
           project_description = config['project']['description']
         else:
           project_description = ''
@@ -112,6 +112,7 @@ def prettymysetuppy(name, version):
   download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
   source_folder = download_folder + name + '-' + version
   setuppy_file = source_folder + '/' + 'setup.py'
+  prettysetuppy_file = source_folder + '/' + 'pretty.setup.py'
   pyprojecttoml_file = source_folder + '/' + 'pyproject.toml'
   if not os.path.exists(setuppy_file):
      if os.path.exists(pyprojecttoml_file):
@@ -128,8 +129,11 @@ def prettymysetuppy(name, version):
     template="Pretty this python setup-py file : {setupfile}",
   )
   response = prompt.format(setupfile=setupfile)
-  print(response)
-  return response
+  f = open(prettysetuppy_file, 'w').write(response)
+  f.close
+  
+
+  
 
 
   
