@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+import configparser
 import subprocess
 import os
 import requests
@@ -106,18 +107,69 @@ def createsetuppyfrompyprojecttoml(name, version):
     )
     """
               )
+def replace_setupcfg_with_pyprojecttoml(setupcfg_file, pyprojecttoml_file):
+# Read the contents of setup.cfg
+  config = configparser.ConfigParser()
+  config.read(setupcfg_file)
+
+# Extract the relevant fields from setup.cfg
+  name = config["metadata"]["name"]
+  version = config["metadata"]["version"]
+  description = config["metadata"]["description"]
+  url = config["metadata"]["url"]
+  author = config["metadata"]["author"]
+  author_email = config["metadata"]["author_email"]
+  license = config["metadata"]["license"]
+  classifiers = config["metadata"]["classifiers"].split("\n")
+  requires_python = config["metadata"]["requires_python"]
+
+  # Construct the pyproject.toml file
+  pyproject = {
+    "tool": {
+        "poetry": {
+            "name": name,
+            "version": version,
+            "description": description,
+            "homepage": url,
+            "authors": [f"{author} <{author_email}>"],
+            "license": license,
+            "classifiers": classifiers,
+            "dependencies": {},
+            "dev-dependencies": {},
+            "optional-dependencies": {},
+            "scripts": {},
+            "plugins": {
+                "pytest": {
+                    "enabled": False
+                }
+            }
+        }
+    }
+  }
+
+  # Write the pyproject.toml file
+  with open(pyprojecttoml_file, "w") as f:
+    toml.dump(pyproject, f)
+
 
 
 def prettymysetuppy(name, version):
   download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
   source_folder = download_folder + name + '-' + version
   setuppy_file = source_folder + '/' + 'setup.py'
+  setupcfg_file = source_folder + '/' + 'setup.cfg'
   prettysetuppy_file = source_folder + '/' + 'pretty.setup.py'
   pyprojecttoml_file = source_folder + '/' + 'pyproject.toml'
+  if os.path.exists(setupcfg_file):
+     checksetupcfg = open(setupcfg_file, 'r').read()
+     if 'name' in checksetupcfg:
+        replace_setupcfg_with_pyprojecttoml(setupcfg_file, pyprojecttoml_file)
+        os.remove(setupcfg_file)
+        os.remove(setuppy_file)
+
   if not os.path.exists(setuppy_file):
      if os.path.exists(pyprojecttoml_file):
        createsetuppyfrompyprojecttoml(name, version)
-
      
   setupfile = ""
   if os.path.exists(setuppy_file):
@@ -127,10 +179,11 @@ def prettymysetuppy(name, version):
         setupfile += line
     prompt = PromptTemplate(
       input_variables=["setupfile"],
-      template="Pretty this python setup-py file : {setupfile}",
+      template="Pretty this python setup-py file. the file has to have : {setupfile}",
     )
     response = prompt.format(setupfile=setupfile)
     response = response.replace("Pretty this python setup-py file : ", "")
+
     open(prettysetuppy_file, 'w').write(response)
 
 
