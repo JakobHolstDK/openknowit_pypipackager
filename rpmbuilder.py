@@ -3,14 +3,52 @@ import subprocess
 import os
 import requests
 import sys
+from langchain.prompts import PromptTemplate
+
+prompt = PromptTemplate(
+    input_variables=["product"],
+    template="What is a good name for a company that makes {product}?",
+)
+
+import json
+
 API_URL = os.getenv("PYPIAPI")
 MONGO_URI = os.getenv("MONGO")
+AITOKEN = os.getenv("OPENAI_API_KEY")
 
 
 
 # Create a MongoDB client
 client = MongoClient(MONGO_URI)
 db = client['pypi-packages']
+
+
+def prettymysetuppy(name, version):
+  download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
+  source_folder = download_folder + name + '-' + version
+  setuppy_file = source_folder + '/' + 'setup.py'
+  setupfile = ""
+  with open(setuppy_file, 'r') as file:
+    data = file.readlines()
+    for line in data:
+      setupfile += line
+  prompt = PromptTemplate(
+    input_variables=["setupfile"],
+    template="Pretty this python setup-py file : {setupfile}",
+    max_tokens=1024,
+    temperature=0.5,
+    top_p=1,
+    frequency_penalty=0.5,
+    presence_penalty=0.5
+  )
+  response = prompt.generate(setupfile)
+  print(response)
+  return response
+
+
+  
+      
+   
 
 def registerpypipackage(name, version):
   package_data = {
@@ -35,6 +73,13 @@ def filenames(mypath):
 def diflist(list1 , list2):
   list_dif = [i for i in list1 + list2 if i not in list1 or i not in list2]
   return list_dif
+
+def create_spec_file(name, version):
+  download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
+  source_folder = download_folder + name + '-' + version
+  spec_file = source_folder + '/' + name + '.spec'
+
+  subprocess.call(["tar", "-xzf", download_folder + filename, '-C' , download_folder])
 
 
 def unpack_gz_file(filename):
@@ -96,6 +141,12 @@ for file in filenames(download_folder):
   if file.endswith('.zip'):
     unpack_zip_file(file)
 
+
+
+query = {'rpmbuild': False}
+packages = db['pypi_packages']
+for package in packages.find(query):
+    prettymysetuppy(package['name'],  package['version'])
 
 
 
