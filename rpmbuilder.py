@@ -18,6 +18,22 @@ AITOKEN = os.getenv("OPENAI_API_KEY")
 client = MongoClient(MONGO_URI)
 db = client['pypi-packages']
 
+def create_default_pyproject_toml(name, version):
+    pyproject_toml = {
+        'tool': {
+            'poetry': {
+                'name': name,
+                'version': version,
+                'description': '',
+                'authors': [],
+                'license': 'MIT',
+                'dependencies': {},
+                'dev-dependencies': {}
+            }
+        }
+    }
+    return toml.dumps(pyproject_toml)
+
 def createsetuppyfrompyprojecttoml(name, version):
   print("Creating setup.py file from pyproject.toml file")
   print("This is a temporary solution, please add a setup.py file to your project"
@@ -150,8 +166,7 @@ def replace_setupcfg_with_pyprojecttoml(setupcfg_file, pyprojecttoml_file, name,
     with open(pyprojecttoml_file, "r") as f:
       pyproject = toml.load(f)
   else:
-    pyproject = {"tool": {"poetry": {}}}
-    
+    pyproject = create_default_pyproject_toml(name, version)
 
   # Construct the pyproject.toml file
   # Merge the new fields with the existing pyproject.toml file
