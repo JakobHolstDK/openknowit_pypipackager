@@ -1,4 +1,5 @@
 venv
+myenv
 /source/*
 !/source/README.md
 /rpmbuild/*
