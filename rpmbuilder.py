@@ -23,10 +23,8 @@ def createsetuppyfrompyprojecttoml(name, version):
   pyprojecttoml_file = source_folder + '/' + 'pyproject.toml'
   setuppy_file = source_folder + '/' + 'setup.py'
   if os.path.exists(pyprojecttoml_file):
-    with open("pyproject.toml", "r") as f:
+    with open(pyprojecttoml_file, "r") as f:
       config = toml.load(f)
-
-    # Extract the relevant information from the config file
     project_name = config["tool"]["poetry"]["name"]
     project_version = config["tool"]["poetry"]["version"]
     project_description = config["tool"]["poetry"]["description"]
@@ -59,7 +57,7 @@ def prettymysetuppy(name, version):
   if not os.path.exists(setuppy_file):
      if os.path.exists(pyprojecttoml_file):
        createsetuppyfrompyprojecttoml(name, version)
-       
+
      
   setupfile = ""
   with open(setuppy_file, 'r') as file:
