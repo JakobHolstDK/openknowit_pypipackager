@@ -92,18 +92,18 @@ def createsetuppyfrompyprojecttoml(name, version):
     # Generate the setup.py file
     with open(setuppy_file, "w") as f:
       f.write(f"""
-    from setuptools import setup, find_packages
-    setup(
-      name="{project_name}",
-      version="{project_version}",
-      description="{project_description}",
-      license="{project_license}",
-      url="{project_url}",
-      author="{project_authors}",
-      packages=find_packages(),
-    )
-    """
-              )
+
+from setuptools import setup, find_packages
+  setup(
+    name="{project_name}",
+    version="{project_version}",
+    description="{project_description}",
+    license="{project_license}",
+    url="{project_url}",
+    author="{project_authors}",
+    packages=find_packages(),
+  )
+    """)
       
 def replace_setupcfg_with_pyprojecttoml(setupcfg_file, pyprojecttoml_file):
 # Read the contents of setup.cfg
