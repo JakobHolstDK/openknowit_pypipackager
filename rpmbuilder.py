@@ -35,7 +35,17 @@ def filenames(mypath):
 def diflist(list1 , list2):
   list_dif = [i for i in list1 + list2 if i not in list1 or i not in list2]
   return list_dif
-    
+
+
+def unpack_gz_file(filename):
+  download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
+  subprocess.call(["tar", "-xzf", filename, '-C' , download_folder])
+
+def unpack_zip_file(filename):
+   download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
+   print("HELLLLLP")
+
+
 def unpack_whl_file(filename):
   download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
   subprocess.call(["wheel", "unpack", filename, '--dest' , download_folder])
