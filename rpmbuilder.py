@@ -168,22 +168,13 @@ def replace_setupcfg_with_pyprojecttoml(setupcfg_file, pyprojecttoml_file, name,
   else:
     pyproject = create_default_pyproject_toml(name, version)
 
-  # Construct the pyproject.toml file
-  # Merge the new fields with the existing pyproject.toml file
-  try:
-    poetry = pyproject["tool"]["poetry"]
-  except:
-    poetry = {}
-    pyproject["tool"] = {}
-    pyproject["tool"]["poetry"] = poetry
-    
-  poetry["name"] = name
-  poetry["version"] = version
-  poetry["description"] = description
-  poetry["homepage"] = url
-  poetry["authors"] = [f"{author} <{author_email}>"]
-  poetry["license"] = license
-  poetry["classifiers"] = classifiers
+  pyproject['tool']['poetry']["name"] = name
+  pyproject['tool']['poetry']["Version"] = version
+  pyproject['tool']['poetry']["description"] = description
+  pyproject['tool']['poetry']["homepage"] = url
+  pyproject['tool']['poetry']["authors"] = [f"{author} <{author_email}>"]
+  pyproject['tool']['poetry']["license"] = license
+  pyproject['tool']['poetry']["classifiers"] = classifiers
 
   # Write the updated pyproject.toml file
   with open(pyprojecttoml_file, "w") as f:
