@@ -31,12 +31,24 @@ def createsetuppyfrompyprojecttoml(name, version):
   if os.path.exists(pyprojecttoml_file):
     with open(pyprojecttoml_file, "r") as f:
       config = toml.load(f)
-    project_name = config["tool"]["poetry"]["name"]
-    project_version = config["tool"]["poetry"]["version"]
-    project_description = config["tool"]["poetry"]["description"]
-    project_license = config["tool"]["poetry"]["license"]
-    project_url = config["tool"]["poetry"]["homepage"]
-    project_authors = config["tool"]["poetry"]["authors"]
+    if config["tool"]["poetry"]["name"] == name:
+      print("The name in the pyproject.toml has a poetry entry with the same name as the package")
+      project_name = config["tool"]["poetry"]["name"]
+      project_version = config["tool"]["poetry"]["version"]
+      project_description = config["tool"]["poetry"]["description"]
+      project_license = config["tool"]["poetry"]["license"]
+      project_url = config["tool"]["poetry"]["homepage"]
+      project_authors = config["tool"]["poetry"]["authors"]
+    else:
+      if  config['project']['name'] == name:
+        print("The name in the pyproject.toml has a project entry with the same name as the package")
+        project_name = config['project']['name']
+        project_version = config['project']['version']
+        project_description = config['project']['description']
+        project_license = config['project']['license']
+        project_url = config['project']['url']
+        project_authors = config['project']['authors']
+       
 
     # Generate the setup.py file
     with open(setuppy_file, "w") as f:
