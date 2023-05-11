@@ -129,6 +129,7 @@ def prettymysetuppy(name, version):
     template="Pretty this python setup-py file : {setupfile}",
   )
   response = prompt.format(setupfile=setupfile)
+  response = response.replace("Pretty this python setup-py file : ", "")
   open(prettysetuppy_file, 'w').write(response)
 
 
