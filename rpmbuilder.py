@@ -56,11 +56,35 @@ def createsetuppyfrompyprojecttoml(name, version):
     if  project:
         print("The name in the pyproject.toml has a project entry with the same name as the package")
         project_name = config['project']['name']
-        project_version = config['project']['version']
-        project_description = config['project']['description']
-        project_license = config['project']['license']
-        project_url = config['project']['url']
+        if 'version' in config['project']:
+          project_version = config['project']['version']
+        else:
+          project_version = version
+        if 'description' in config['project']:
+          
+          project_description = config['project']['description']
+        else:
+          project_description = ''
+
+        if 'license' in config['project']:
+          project_license = config['project']['license']
+        else:
+          project_license = ''
+
+        if 'project_url' in config['project']:
+           project_url = config['project']['project_url']
+        else:
+           project_url = ''
+
+        if 'project_authors' in config['project']:
+          project_authors = config['project']['project_authors']
+        else:
+          project_authors = ''
+
+           
+
         project_authors = config['project']['authors']
+
     if not project and not poetry:
       print("The name in the pyproject.toml has no project or poetry entry with the same name as the package")
       print("Please add a setup.py file to your project and upload it to your repository")
