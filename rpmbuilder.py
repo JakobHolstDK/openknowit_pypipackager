@@ -111,19 +111,7 @@ def replace_setupcfg_with_pyprojecttoml(setupcfg_file, pyprojecttoml_file):
   config.read(setupcfg_file)
 
 # Extract the relevant fields from setup.cfg
-  name = config["metadata"# Merge the new fields with the existing pyproject.toml file
-poetry = pyproject["tool"]["poetry"]
-poetry["name"] = name
-poetry["version"] = version
-poetry["description"] = description
-poetry["homepage"] = url
-poetry["authors"] = [f"{author} <{author_email}>"]
-poetry["license"] = license
-poetry["classifiers"] = classifiers
-
-# Write the updated pyproject.toml file
-with open("pyproject.toml", "w") as f:
-    toml.dump(pyproject, f)]["name"]
+  name = config["metadata"]["name"]
   version = config["metadata"]["version"]
   description = config["metadata"]["description"]
   url = config["metadata"]["url"]
@@ -178,7 +166,7 @@ def prettymysetuppy(name, version):
         setupfile += line
     prompt = PromptTemplate(
       input_variables=["setupfile"],
-      template="Pretty this python setup-py file. the file has to have name : " + name + " and a version : " + version + "defined"  : {setupfile}",
+      template="Pretty this python setup-py file. the file has to have name : " + name + " and a version : " + version +"  : {setupfile}",
     )
     response = prompt.format(setupfile=setupfile)
     response = response.replace("Pretty this python setup-py file : ", "")
