@@ -146,8 +146,12 @@ def replace_setupcfg_with_pyprojecttoml(setupcfg_file, pyprojecttoml_file, name,
 
     
       # Load the existing pyproject.toml file
-  with open(pyprojecttoml_file, "r") as f:
-    pyproject = toml.load(f)
+  if os.path.exists(pyprojecttoml_file):
+    with open(pyprojecttoml_file, "r") as f:
+      pyproject = toml.load(f)
+  else:
+    pyproject = {"tool": {"poetry": {}}}
+    
 
   # Construct the pyproject.toml file
   # Merge the new fields with the existing pyproject.toml file
