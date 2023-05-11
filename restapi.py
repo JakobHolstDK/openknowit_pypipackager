@@ -1,13 +1,16 @@
 from flask import Flask, request, jsonify
 from pymongo import MongoClient
 from bson import json_util
+import os
 import json
 
 
 app = Flask(__name__)
-client = MongoClient('mongodb://localhost:27017/')
+client = MongoClient(os.getenv("MONGO"))
 db = client['pypi-packages']
-#pypipackager = db['pypi_packages']
+pypipackages = db['pypi_packages']
+print(json.loads(json_util.dumps(pypipackages.find())))
+
 #pypipackager.delete_many({})
 
 
@@ -29,4 +32,4 @@ def get_pypi_packages():
     return json.loads(json_util.dumps(pypi_packages.find()))
 
 if __name__ == '__main__':
-    app.run()
+  app.run(host='0.0.0.0', port=5005)
