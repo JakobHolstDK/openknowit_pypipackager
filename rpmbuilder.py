@@ -39,7 +39,7 @@ def diflist(list1 , list2):
 
 def unpack_gz_file(filename):
   download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
-  subprocess.call(["tar", "-xzf", filename, '-C' , download_folder])
+  subprocess.call(["tar", "-xzf", download_folder + filename, '-C' , download_folder])
 
 def unpack_zip_file(filename):
    download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
