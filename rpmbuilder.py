@@ -120,17 +120,18 @@ def prettymysetuppy(name, version):
 
      
   setupfile = ""
-  with open(setuppy_file, 'r') as file:
-    data = file.readlines()
-    for line in data:
-      setupfile += line
-  prompt = PromptTemplate(
-    input_variables=["setupfile"],
-    template="Pretty this python setup-py file : {setupfile}",
-  )
-  response = prompt.format(setupfile=setupfile)
-  response = response.replace("Pretty this python setup-py file : ", "")
-  open(prettysetuppy_file, 'w').write(response)
+  if os.path.exists(setuppy_file):
+    with open(setuppy_file, 'r') as file:
+      data = file.readlines()
+      for line in data:
+        setupfile += line
+    prompt = PromptTemplate(
+      input_variables=["setupfile"],
+      template="Pretty this python setup-py file : {setupfile}",
+    )
+    response = prompt.format(setupfile=setupfile)
+    response = response.replace("Pretty this python setup-py file : ", "")
+    open(prettysetuppy_file, 'w').write(response)
 
 
   
