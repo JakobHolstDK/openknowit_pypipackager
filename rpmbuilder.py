@@ -143,7 +143,7 @@ def replace_setupcfg_with_pyprojecttoml(setupcfg_file, pyprojecttoml_file, name,
     requires_python = config["metadata"]["requires_python"]
   except:
     requires_python = ''
-    
+
     
       # Load the existing pyproject.toml file
   with open(pyprojecttoml_file, "r") as f:
@@ -175,7 +175,7 @@ def prettymysetuppy(name, version):
   if os.path.exists(setupcfg_file):
      checksetupcfg = open(setupcfg_file, 'r').read()
      if 'name' in checksetupcfg:
-        replace_setupcfg_with_pyprojecttoml(setupcfg_file, pyprojecttoml_file)
+        replace_setupcfg_with_pyprojecttoml(setupcfg_file, pyprojecttoml_file, name, version)
         os.remove(setupcfg_file)
         os.remove(setuppy_file)
 
