@@ -122,35 +122,24 @@ def replace_setupcfg_with_pyprojecttoml(setupcfg_file, pyprojecttoml_file):
   license = config["metadata"]["license"]
   classifiers = config["metadata"]["classifiers"].split("\n")
   requires_python = config["metadata"]["requires_python"]
+  # Load the existing pyproject.toml file
+  with open(pyprojecttoml_file, "r") as f:
+    pyproject = toml.load(f)
 
   # Construct the pyproject.toml file
-  pyproject = {
-    "tool": {
-        "poetry": {
-            "name": name,
-            "version": version,
-            "description": description,
-            "homepage": url,
-            "authors": [f"{author} <{author_email}>"],
-            "license": license,
-            "classifiers": classifiers,
-            "dependencies": {},
-            "dev-dependencies": {},
-            "optional-dependencies": {},
-            "scripts": {},
-            "plugins": {
-                "pytest": {
-                    "enabled": False
-                }
-            }
-        }
-    }
-  }
+  # Merge the new fields with the existing pyproject.toml file
+  poetry = pyproject["tool"]["poetry"]
+  poetry["name"] = name
+  poetry["version"] = version
+  poetry["description"] = description
+  poetry["homepage"] = url
+  poetry["authors"] = [f"{author} <{author_email}>"]
+  poetry["license"] = license
+  poetry["classifiers"] = classifiers
 
-  # Write the pyproject.toml file
+  # Write the updated pyproject.toml file
   with open(pyprojecttoml_file, "w") as f:
     toml.dump(pyproject, f)
-
 
 
 def prettymysetuppy(name, version):
