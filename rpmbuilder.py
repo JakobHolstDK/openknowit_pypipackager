@@ -3,12 +3,15 @@ import subprocess
 import os
 import requests
 import sys
-API_URL = 'http://localhost:5000/pypi-packages'
+API_URL = os.getenv("PYPIAPI")
+MONGO_URI = os.getenv("MONGO")
+
 
 
 # Create a MongoDB client
-client = MongoClient('mongodb://localhost:27017/')
+client = MongoClient(MONGO_URI)
 db = client['pypi-packages']
+
 def registerpypipackage(name, version):
   package_data = {
             'name': name,
@@ -82,8 +85,6 @@ for file in filenames(download_folder):
     unpack_gz_file(file)
   if file.endswith('.zip'):
     unpack_zip_file(file)
-
-     os.remove(files)
 
 
 

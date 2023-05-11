@@ -1,7 +1,7 @@
 import os
 import requests
 
-API_URL = 'http://localhost:5000/pypi-packages'
+API_URL = 'https://pypi.openknowit.com/pypi-packages'
 
 # Generate requirements.txt file if it does not exist
 if not os.path.isfile('requirements.txt'):
