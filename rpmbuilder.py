@@ -170,7 +170,13 @@ def replace_setupcfg_with_pyprojecttoml(setupcfg_file, pyprojecttoml_file, name,
 
   # Construct the pyproject.toml file
   # Merge the new fields with the existing pyproject.toml file
-  poetry = pyproject["tool"]["poetry"]
+  try:
+    poetry = pyproject["tool"]["poetry"]
+  except:
+    poetry = {}
+    pyproject["tool"] = {}
+    pyproject["tool"]["poetry"] = poetry
+    
   poetry["name"] = name
   poetry["version"] = version
   poetry["description"] = description
