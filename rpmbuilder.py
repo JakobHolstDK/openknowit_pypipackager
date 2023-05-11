@@ -18,6 +18,12 @@ client = MongoClient(MONGO_URI)
 db = client['pypi-packages']
 
 def createsetuppyfrompyprojecttoml(name, version):
+  print("Creating setup.py file from pyproject.toml file")
+  print("This is a temporary solution, please add a setup.py file to your project"
+        "and upload it to your repository")
+  print("This will be fixed in the future")
+  print("the name is: " + name + " and the version is: " + version)
+
   download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
   source_folder = download_folder + name + '-' + version
   pyprojecttoml_file = source_folder + '/' + 'pyproject.toml'
