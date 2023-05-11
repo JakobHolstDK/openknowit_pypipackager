@@ -98,29 +98,54 @@ from setuptools import setup, find_packages
     name="{project_name}",
     version="{project_version}",
     description="{project_description}",
-    license="{project_license}",
+    license="{project_license}"replace_setupcfg_with_pyprojecttoml,
     url="{project_url}",
     author="{project_authors}",
     packages=find_packages(),
   )
     """)
       
-def replace_setupcfg_with_pyprojecttoml(setupcfg_file, pyprojecttoml_file):
+def replace_setupcfg_with_pyprojecttoml(setupcfg_file, pyprojecttoml_file, name, version):
 # Read the contents of setup.cfg
   config = configparser.ConfigParser()
   config.read(setupcfg_file)
 
 # Extract the relevant fields from setup.cfg
-  name = config["metadata"]["name"]
-  version = config["metadata"]["version"]
-  description = config["metadata"]["description"]
-  url = config["metadata"]["url"]
-  author = config["metadata"]["author"]
-  author_email = config["metadata"]["author_email"]
-  license = config["metadata"]["license"]
-  classifiers = config["metadata"]["classifiers"].split("\n")
-  requires_python = config["metadata"]["requires_python"]
-  # Load the existing pyproject.toml file
+  
+  try:
+    description = config["metadata"]["description"]
+  except:
+    description = ''
+  try:
+    url = config["metadata"]["url"]
+  except:
+    url = ''
+  try:
+    author = config["metadata"]["author"]
+  except:
+    author = ''
+
+  try:
+    author_email = config["metadata"]["author_email"]
+  except:
+    author_email = ''
+
+  try:  
+    license = config["metadata"]["license"]
+  except:
+    license = ''
+  try:
+    classifiers = config["metadata"]["classifiers"].split("\n")
+  except:
+    classifiers = ''
+
+  try:  
+    requires_python = config["metadata"]["requires_python"]
+  except:
+    requires_python = ''
+    
+    
+      # Load the existing pyproject.toml file
   with open(pyprojecttoml_file, "r") as f:
     pyproject = toml.load(f)
 
