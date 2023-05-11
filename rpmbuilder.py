@@ -35,11 +35,6 @@ def prettymysetuppy(name, version):
   prompt = PromptTemplate(
     input_variables=["setupfile"],
     template="Pretty this python setup-py file : {setupfile}",
-    max_tokens=1024,
-    temperature=0.5,
-    top_p=1,
-    frequency_penalty=0.5,
-    presence_penalty=0.5
   )
   response = prompt.generate(setupfile)
   print(response)
