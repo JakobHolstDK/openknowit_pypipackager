@@ -3,13 +3,8 @@ import subprocess
 import os
 import requests
 import sys
+import toml 
 from langchain.prompts import PromptTemplate
-
-prompt = PromptTemplate(
-    input_variables=["product"],
-    template="What is a good name for a company that makes {product}?",
-)
-
 import json
 
 API_URL = os.getenv("PYPIAPI")
@@ -22,11 +17,50 @@ AITOKEN = os.getenv("OPENAI_API_KEY")
 client = MongoClient(MONGO_URI)
 db = client['pypi-packages']
 
+def createsetuppyfrompyprojecttoml(name, version):
+  download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
+  source_folder = download_folder + name + '-' + version
+  pyprojecttoml_file = source_folder + '/' + 'pyproject.toml'
+  setuppy_file = source_folder + '/' + 'setup.py'
+  if os.path.exists(pyprojecttoml_file):
+    with open("pyproject.toml", "r") as f:
+      config = toml.load(f)
+
+    # Extract the relevant information from the config file
+    project_name = config["tool"]["poetry"]["name"]
+    project_version = config["tool"]["poetry"]["version"]
+    project_description = config["tool"]["poetry"]["description"]
+    project_license = config["tool"]["poetry"]["license"]
+    project_url = config["tool"]["poetry"]["homepage"]
+    project_authors = config["tool"]["poetry"]["authors"]
+
+    # Generate the setup.py file
+    with open(setuppy_file, "w") as f:
+      f.write(f"""
+    from setuptools import setup, find_packages
+    setup(
+      name="{project_name}",
+      version="{project_version}",
+      description="{project_description}",
+      license="{project_license}",
+      url="{project_url}",
+      author="{project_authors}",
+      packages=find_packages(),
+    )
+    """
+              )
+
 
 def prettymysetuppy(name, version):
   download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
   source_folder = download_folder + name + '-' + version
   setuppy_file = source_folder + '/' + 'setup.py'
+  pyprojecttoml_file = source_folder + '/' + 'pyproject.toml'
+  if not os.path.exists(setuppy_file):
+     if os.path.exists(pyprojecttoml_file):
+       createsetuppyfrompyprojecttoml(name, version)
+       
+     
   setupfile = ""
   with open(setuppy_file, 'r') as file:
     data = file.readlines()
