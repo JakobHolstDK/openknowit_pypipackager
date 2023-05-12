@@ -169,9 +169,9 @@ def replace_setupcfg_with_pyprojecttoml(setupcfg_file, pyprojecttoml_file, name,
 
   pyproject['tool'] = {}
   pyproject['tool']['poetry'] = {}
-  
+
   pyproject['tool']['poetry']["name"] = name
-  pyproject['tool']['poetry']["Version"] = version
+  pyproject['tool']['poetry']["version"] = version
   pyproject['tool']['poetry']["description"] = description
   pyproject['tool']['poetry']["homepage"] = url
   pyproject['tool']['poetry']["authors"] = [f"{author} <{author_email}>"]
