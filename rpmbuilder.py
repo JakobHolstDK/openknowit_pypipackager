@@ -125,9 +125,8 @@ def replace_setupcfg_with_pyprojecttoml(setupcfg_file, pyprojecttoml_file, name,
 # Read the contents of setup.cfg
   config = configparser.ConfigParser()
   config.read(setupcfg_file)
-
 # Extract the relevant fields from setup.cfg
-  
+  pyproject = create_default_pyproject_toml(name, version)
   try:
     description = config["metadata"]["description"]
   except:
@@ -160,14 +159,12 @@ def replace_setupcfg_with_pyprojecttoml(setupcfg_file, pyprojecttoml_file, name,
   except:
     requires_python = ''
 
-    
-      # Load the existing pyproject.toml file
   if os.path.exists(pyprojecttoml_file):
     with open(pyprojecttoml_file, "r") as f:
       pyproject = toml.load(f)
   else:
     pyproject = create_default_pyproject_toml(name, version)
-
+  print(type(pyproject))
   pyproject['tool']['poetry']["name"] = name
   pyproject['tool']['poetry']["Version"] = version
   pyproject['tool']['poetry']["description"] = description
