@@ -216,8 +216,6 @@ def prettymysetuppy(name, version):
      checksetupcfg = open(setupcfg_file, 'r').read()
      if 'name' in checksetupcfg:
         replace_setupcfg_with_pyprojecttoml(setupcfg_file, pyprojecttoml_file, name, version)
-        os.remove(setupcfg_file)
-        os.remove(setuppy_file)
 
   if not os.path.exists(setuppy_file):
      if os.path.exists(pyprojecttoml_file):
