@@ -12,14 +12,11 @@ API_URL = os.getenv("PYPIAPI")
 MONGO_URI = os.getenv("MONGO")
 AITOKEN = os.getenv("OPENAI_API_KEY")
 
-
-
 # Create a MongoDB client
 client = MongoClient(MONGO_URI)
 db = client['pypi-packages']
 
 def create_default_pyproject_toml(name, version):
-    
     pyproject = {
         'tool': {
             'poetry': {
@@ -36,12 +33,6 @@ def create_default_pyproject_toml(name, version):
     return (pyproject)
 
 def createsetuppyfrompyprojecttoml(name, version):
-  print("Creating setup.py file from pyproject.toml file")
-  print("This is a temporary solution, please add a setup.py file to your project"
-        "and upload it to your repository")
-  print("This will be fixed in the future")
-  print("the name is: " + name + " and the version is: " + version)
-
   download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
   source_folder = download_folder + name + '-' + version
   pyprojecttoml_file = source_folder + '/' + 'pyproject.toml'
@@ -56,7 +47,6 @@ def createsetuppyfrompyprojecttoml(name, version):
         poetry = False
 
     if  poetry:
-      print("The name in the pyproject.toml has a poetry entry with the same name as the package")
       try:
         project_name = config["tool"]["poetry"]["name"]
       except:
@@ -89,7 +79,6 @@ def createsetuppyfrompyprojecttoml(name, version):
         project = False
 
     if  project:
-        print("The name in the pyproject.toml has a project entry with the same name as the package")
         project_name = config['project']['name']
         if 'version' in config['project']:
           project_version = config['project']['version']
@@ -182,25 +171,33 @@ def replace_setupcfg_with_pyprojecttoml(setupcfg_file, pyprojecttoml_file, name,
       pyproject = toml.load(f)
   else:
     pyproject = create_default_pyproject_toml(name, version)
-  print(type(pyproject))
-  print(pyproject)
-
   pyproject['tool'] = {}
   pyproject['tool']['poetry'] = {}
-
   pyproject['tool']['poetry']["name"] = name
   try: 
     pyproject['tool']['poetry']["version"] = version
   except:
     pyproject['tool']['poetry']["Version"] = version
-
-  pyproject['tool']['poetry']["description"] = description
-  pyproject['tool']['poetry']["homepage"] = url
-  pyproject['tool']['poetry']["authors"] = [f"{author} <{author_email}>"]
-  pyproject['tool']['poetry']["license"] = license
-  pyproject['tool']['poetry']["classifiers"] = classifiers
-
-  # Write the updated pyproject.toml file
+  try:
+    pyproject['tool']['poetry']["description"] = description
+  except:
+    pyproject['tool']['poetry']["description"] = ''
+  try:
+    pyproject['tool']['poetry']["homepage"] = url
+  except:
+    pyproject['tool']['poetry']["homepage"] = ''
+  try;  
+    pyproject['tool']['poetry']["authors"] = [f"{author} <{author_email}>"]
+  except:
+    pyproject['tool']['poetry']["authors"] = ''
+  try:
+    pyproject['tool']['poetry']["license"] = license
+  except:
+    pyproject['tool']['poetry']["license"] = ''
+  try:
+    pyproject['tool']['poetry']["classifiers"] = classifiers
+  except:
+    pyproject['tool']['poetry']["classifiers"] = ''
   with open(pyprojecttoml_file, "w") as f:
     toml.dump(pyproject, f)
 
@@ -234,14 +231,6 @@ def prettymysetuppy(name, version):
     response = prompt.format(setupfile=setupfile)
     response = response.replace("Pretty this python setup-py file. the file has to have name : " + name + " and a version : " + version + "  : ", "")
     open(prettysetuppy_file, 'w').write(response)
-
-
-  
-
-
-  
-      
-   
 
 def registerpypipackage(name, version):
   package_data = {
@@ -316,9 +305,6 @@ def downloadpypipackage(name, version):
             return os.path.join(download_folder, filename)
   return None
 
-
-
-
 query = {'rpmbuild': False}
 packages = db['pypi_packages']
 for package in packages.find(query):
@@ -334,16 +320,13 @@ for file in filenames(download_folder):
   if file.endswith('.zip'):
     unpack_zip_file(file)
 
-
-
 query = {'rpmbuild': False}
 packages = db['pypi_packages']
 for package in packages.find(query):
     prettymysetuppy(package['name'],  package['version'])
-
-
-
-
+    create_spec_file(package['name'],  package['version'])
+    query = {'name': package['name'], 'version': package['version']}
+    update = {'$set': {'rpmbuild': True}}
+    packages.update_one(query, update)
+    registerpypipackage(package['name'],  package['version'])
     
-
-
