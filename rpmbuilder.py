@@ -166,6 +166,10 @@ def replace_setupcfg_with_pyprojecttoml(setupcfg_file, pyprojecttoml_file, name,
     pyproject = create_default_pyproject_toml(name, version)
   print(type(pyproject))
   print(pyproject)
+
+  pyproject['tool'] = {}
+  pyproject['tool']['poetry'] = {}
+  
   pyproject['tool']['poetry']["name"] = name
   pyproject['tool']['poetry']["Version"] = version
   pyproject['tool']['poetry']["description"] = description
