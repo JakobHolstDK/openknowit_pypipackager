@@ -186,7 +186,7 @@ def replace_setupcfg_with_pyprojecttoml(setupcfg_file, pyprojecttoml_file, name,
     pyproject['tool']['poetry']["homepage"] = url
   except:
     pyproject['tool']['poetry']["homepage"] = ''
-  try;  
+  try:  
     pyproject['tool']['poetry']["authors"] = [f"{author} <{author_email}>"]
   except:
     pyproject['tool']['poetry']["authors"] = ''
