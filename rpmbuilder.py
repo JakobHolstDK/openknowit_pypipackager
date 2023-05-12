@@ -57,14 +57,31 @@ def createsetuppyfrompyprojecttoml(name, version):
 
     if  poetry:
       print("The name in the pyproject.toml has a poetry entry with the same name as the package")
-      project_name = config["tool"]["poetry"]["name"]
-      project_version = config["tool"]["poetry"]["version"]
-      project_description = config["tool"]["poetry"]["description"]
-      project_license = config["tool"]["poetry"]["license"]
-      project_url = config["tool"]["poetry"]["homepage"]
-      project_authors = config["tool"]["poetry"]["authors"]
-    
-      
+      try:
+        project_name = config["tool"]["poetry"]["name"]
+      except:
+        project_name = name
+      try:
+        project_version = config["tool"]["poetry"]["version"]
+      except:
+        project_version = version
+      try:
+
+        project_description = config["tool"]["poetry"]["description"]
+      except:
+        project_description = ''
+      try:
+        project_license = config["tool"]["poetry"]["license"]
+      except:
+        project_license = ''
+      try:
+        project_url = config["tool"]["poetry"]["homepage"]
+      except:
+        project_url = ''
+      try:
+        project_authors = config["tool"]["poetry"]["authors"] 
+      except:
+        project_authors = ''
     try: 
       if config['project']['name'] == name:
         project = True
