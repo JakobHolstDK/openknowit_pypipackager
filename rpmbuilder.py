@@ -19,7 +19,8 @@ client = MongoClient(MONGO_URI)
 db = client['pypi-packages']
 
 def create_default_pyproject_toml(name, version):
-    pyproject_toml = {
+    
+    pyproject = {
         'tool': {
             'poetry': {
                 'name': name,
@@ -32,7 +33,7 @@ def create_default_pyproject_toml(name, version):
             }
         }
     }
-    return toml.dumps(pyproject_toml)
+    return (pyproject)
 
 def createsetuppyfrompyprojecttoml(name, version):
   print("Creating setup.py file from pyproject.toml file")
@@ -175,7 +176,7 @@ def replace_setupcfg_with_pyprojecttoml(setupcfg_file, pyprojecttoml_file, name,
     pyproject['tool']['poetry']["version"] = version
   except:
     pyproject['tool']['poetry']["Version"] = version
-    
+
   pyproject['tool']['poetry']["description"] = description
   pyproject['tool']['poetry']["homepage"] = url
   pyproject['tool']['poetry']["authors"] = [f"{author} <{author_email}>"]
