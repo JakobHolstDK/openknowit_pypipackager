@@ -337,5 +337,5 @@ for package in packages.find(query):
     query = {'name': package['name'], 'version': package['version']}
     update = {'$set': {'rpmbuild': True}}
     packages.update_one(query, update)
-    registerpypipackage(package['name'],  package['version'])
+    #registerpypipackage(package['name'],  package['version'])
     
