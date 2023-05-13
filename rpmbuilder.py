@@ -226,8 +226,12 @@ def prettymysetuppy(name, version):
       for line in data:
         if line == "   from":
           line = line.replace("   from", "from")
+        if line == "   import":
+          line = line.replace("   import", "import")
+        if line == "   setup(": 
+          line = line.replace("   setup(", "setup(")
         setupfile += line
-        
+
     prompt = PromptTemplate(
       input_variables=["setupfile"],
       template="Pretty this python setup-py file. the file has to have name : " + name + " and a version : " + version +"  : {setupfile}",
