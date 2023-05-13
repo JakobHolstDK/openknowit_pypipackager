@@ -260,8 +260,15 @@ def create_spec_file(name, version):
   download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
   source_folder = download_folder + name + '-' + version
   spec_file = source_folder + '/' + name + '.spec'
-
-  subprocess.call(["tar", "-xzf", download_folder + filename, '-C' , download_folder])
+  #setup.py bdist_rpm --spec-only
+  if os.file_exists("setup.py", source_folder):
+    subprocess.call(["python3", "setup.py", "bdist_rpm", "--spec-only"], cwd=source_folder)
+  else:
+    print("No setup.py file found in source folder")
+    if os.file_exists("pretty.setup.py", source_folder):
+      subprocess.call(["python3", "setup.py", "bdist_rpm", "--spec-only"], cwd=source_folder)
+    else:
+      print("No pretty.setup.py file found in source folder")
 
 
 def unpack_gz_file(filename):
