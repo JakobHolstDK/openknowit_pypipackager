@@ -259,14 +259,16 @@ def diflist(list1 , list2):
 def create_spec_file(name, version):
   download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
   source_folder = download_folder + name + '-' + version
+  setup_file  = download_folder + name + '-' + version + '/setup.py'
   spec_file = source_folder + '/' + name + '.spec'
   #setup.py bdist_rpm --spec-only
-  if os.path.exists("setup.py", source_folder):
+  if os.path.exists(setup_file):
     subprocess.call(["python3", "setup.py", "bdist_rpm", "--spec-only"], cwd=source_folder)
   else:
     print("No setup.py file found in source folder")
-    if os.path.exists("pretty.setup.py", source_folder):
-      subprocess.call(["python3", "setup.py", "bdist_rpm", "--spec-only"], cwd=source_folder)
+    setup_file  = download_folder + name + '-' + version + '/pretty.setup.py'
+    if os.path.exists(setup_file):
+      subprocess.call(["python3", "pretty.setup.py", "bdist_rpm", "--spec-only"], cwd=source_folder)
     else:
       print("No pretty.setup.py file found in source folder")
 
