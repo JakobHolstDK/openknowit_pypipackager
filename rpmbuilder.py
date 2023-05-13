@@ -224,6 +224,7 @@ def prettymysetuppy(name, version):
     with open(setuppy_file, 'r') as file:
       data = file.readlines()
       for line in data:
+        print(line)
         if line == "   from":
           line = line.replace("   from", "from")
         line = line.replace("  seyup(", "setup(")
