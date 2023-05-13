@@ -332,6 +332,7 @@ for file in filenames(download_folder):
 query = {'rpmbuild': False}
 packages = db['pypi_packages']
 for package in packages.find(query):
+    print(package['name'])
     prettymysetuppy(package['name'],  package['version'])
     create_spec_file(package['name'],  package['version'])
     query = {'name': package['name'], 'version': package['version']}
