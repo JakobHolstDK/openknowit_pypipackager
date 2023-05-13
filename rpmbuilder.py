@@ -345,16 +345,10 @@ for file in filenames(download_folder):
   if file.endswith('.gz'):  
     if unpack_gz_file(file):
       print("Unpacked gz file")
-      query = {'name': package['name'], 'version': package['version']}
-      update = {'$set': {'sourceunpacked': True}}
-      packages.update_one(query, update)
     
   if file.endswith('.zip'):
     if unpack_zip_file(file):
       print("Unpacked zip file")
-      query = {'name': package['name'], 'version': package['version']}
-      update = {'$set': {'sourceunpacked': True}}
-      packages.update_one(query, update)
 
 query = {'prettysetuppy': False}
 packages = db['pypi_packages']
