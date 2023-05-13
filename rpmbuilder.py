@@ -223,6 +223,7 @@ def prettymysetuppy(name, version):
     with open(setuppy_file, 'r') as file:
       data = file.readlines()
       for line in data:
+        line = line.replace('^   [a-z]','').replace('  [A-Z]','')
         setupfile += line
     prompt = PromptTemplate(
       input_variables=["setupfile"],
