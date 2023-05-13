@@ -284,7 +284,16 @@ def create_spec_file(name, version):
 
 def unpack_gz_file(filename):
   download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
-  subprocess.call(["tar", "-xzf", download_folder + filename, '-C' , download_folder])
+  runme = subprocess.call(["tar", "-xzf", download_folder + filename, '-C' , download_folder])
+  if runme == 0:
+    print("File unpacked")
+    return True
+  else:
+    print("File not unpacked")
+    return False
+  
+
+  
 
 def unpack_zip_file(filename):
    download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
@@ -323,20 +332,29 @@ def downloadpypipackage(name, version):
             return os.path.join(download_folder, filename)
   return None
 
-query = {'rpmbuild': False}
+query = {'sourcedownloaded': False}
 packages = db['pypi_packages']
 for package in packages.find(query):
     filename = downloadpypipackage(package['name'], package['version'])
     query = {'name': package['name'], 'version': package['version']}
-    update = {'$set': {'sourcefile': filename}}
+    update = {'$set': {'sourcefile': filename}, '$set': {'sourcedownloaded': True}}
     packages.update_one(query, update)
 
 download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
 for file in filenames(download_folder):
   if file.endswith('.gz'):  
-    unpack_gz_file(file)
+    if unpack_gz_file(file):
+      print("Unpacked gz file")
+      query = {'name': package['name'], 'version': package['version']}
+      update = {'$set': {'sourceunpacked': True}}
+      packages.update_one(query, update)
+    
   if file.endswith('.zip'):
-    unpack_zip_file(file)
+    if unpack_zip_file(file):
+      print("Unpacked zip file")
+      query = {'name': package['name'], 'version': package['version']}
+      update = {'$set': {'sourceunpacked': True}}
+      packages.update_one(query, update)
 
 query = {'prettysetuppy': False}
 packages = db['pypi_packages']

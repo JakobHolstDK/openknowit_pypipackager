@@ -29,7 +29,7 @@ with open('requirements.txt') as f:
             'prettysetuppy': False,
             'pyprojecttoml': False,
             'sourcedownloaded': False,
-            'sourceupacked': False,
+            'sourceunpacked': False,
             'specfile': "",
             'specfilecreated': False,
             'rpmbuild': False,
