@@ -224,7 +224,7 @@ def prettymysetuppy(name, version):
     with open(setuppy_file, 'r') as f:
       contents = f.read()
       contents = re.sub(r'^( +)', '', contents, flags=re.MULTILINE)
-      with open('setup.py', 'w') as f:
+      with open(setuppy_file, 'w') as f:
         f.write(contents)
 
     with open(setuppy_file, 'r') as file:
