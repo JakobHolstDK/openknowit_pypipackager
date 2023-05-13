@@ -226,9 +226,10 @@ def prettymysetuppy(name, version):
       for line in data:
         if line == "   from":
           line = line.replace("   from", "from")
-        if line == "   import":
-          line = line.replace("   import", "import")
-        line = re.sub(r'(\s+)setup\(', 'setup(', line)
+        if line.startswith("  setup("):
+          line = line.replace("  seyup(", "setup(")
+        if line.startswith("   setup("):
+          line = line.replace("   seyup(", "setup(")
         setupfile += line
 
     prompt = PromptTemplate(
