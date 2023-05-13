@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 import configparser
+import re
 import subprocess
 import os
 import requests
@@ -220,6 +221,12 @@ def prettymysetuppy(name, version):
      
   setupfile = ""
   if os.path.exists(setuppy_file):
+    with open(setuppy_file, 'r') as f:
+      contents = f.read()
+      contents = re.sub(r'^( +)', '', contents, flags=re.MULTILINE)
+      with open('setup.py', 'w') as f:
+        f.write(contents)
+
     with open(setuppy_file, 'r') as file:
       data = file.readlines()
       for line in data:
