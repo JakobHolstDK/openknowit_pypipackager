@@ -271,6 +271,7 @@ def create_spec_file(name, version):
       subprocess.call(["python3", "pretty.setup.py", "bdist_rpm", "--spec-only"], cwd=source_folder)
     else:
       print("No pretty.setup.py file found in source folder")
+  
 
 
 def unpack_gz_file(filename):
@@ -329,12 +330,26 @@ for file in filenames(download_folder):
   if file.endswith('.zip'):
     unpack_zip_file(file)
 
-query = {'rpmbuild': False}
+query = {'prettysetuppy': False}
+packages = db['pypi_packages']
+for package in packages.find(query):
+    prettymysetuppy(package['name'],  package['version'])
+    if os.path.exists(download_folder + package['name'] + '-' + package['version'] + '/pretty.setup.py'):
+      query = {'name': package['name'], 'version': package['version']}
+      update = {'$set': {'prettysetuppy': True}}
+      packages.update_one(query, update)
+
+query = {'specfilecreated': False}
 packages = db['pypi_packages']
 for package in packages.find(query):
     print(package['name'])
-    prettymysetuppy(package['name'],  package['version'])
     create_spec_file(package['name'],  package['version'])
+    if os.path.exists(download_folder + package['name'] + '-' + package['version'] + '/dist/' + package['name'] + '.spec'):
+      os.copy(download_folder + package['name'] + '-' + package['version'] + '/dist/' + package['name'] + '.spec', download_folder + package['name'] + '-' + package['version'] + '/dist/' + package['name'] + package['version']+ '.spec')
+      query = {'name': package['name'], 'version': package['version']}
+      update = {'$set': {'specfilecreated': True}}
+      packages.update_one(query, update)
+
 
     #query = {'name': package['name'], 'version': package['version']}
     #update = {'$set': {'rpmbuild': True}}
