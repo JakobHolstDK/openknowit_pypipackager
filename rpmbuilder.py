@@ -345,9 +345,9 @@ for package in packages.find(query):
     print(package['name'])
     create_spec_file(package['name'],  package['version'])
     if os.path.exists(download_folder + package['name'] + '-' + package['version'] + '/dist/' + package['name'] + '.spec'):
-      os.copy(download_folder + package['name'] + '-' + package['version'] + '/dist/' + package['name'] + '.spec', download_folder + package['name'] + '-' + package['version'] + '/dist/' + package['name'] + package['version']+ '.spec')
+      specfile = open(download_folder + package['name'] + '-' + package['version'] + '/dist/' + package['name'] + '.spec', 'r').read()
       query = {'name': package['name'], 'version': package['version']}
-      update = {'$set': {'specfilecreated': True}}
+      update = {'$set': {'specfile': specfile, 'specfilecreated': True}}
       packages.update_one(query, update)
 
 
