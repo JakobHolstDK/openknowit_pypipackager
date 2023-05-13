@@ -261,11 +261,11 @@ def create_spec_file(name, version):
   source_folder = download_folder + name + '-' + version
   spec_file = source_folder + '/' + name + '.spec'
   #setup.py bdist_rpm --spec-only
-  if os.file_exists("setup.py", source_folder):
+  if os.path.exists("setup.py", source_folder):
     subprocess.call(["python3", "setup.py", "bdist_rpm", "--spec-only"], cwd=source_folder)
   else:
     print("No setup.py file found in source folder")
-    if os.file_exists("pretty.setup.py", source_folder):
+    if os.path.exists("pretty.setup.py", source_folder):
       subprocess.call(["python3", "setup.py", "bdist_rpm", "--spec-only"], cwd=source_folder)
     else:
       print("No pretty.setup.py file found in source folder")
