@@ -25,8 +25,10 @@ with open('requirements.txt') as f:
             'name': package_name,
             'version': version_specifier,
             'sourcedownloaded': False,
+            'sourceupacked': False,
             'specfilecreated': False,
             'rpmbuild': False,
+            'rpmfilepublished': False,
             'debbuild': False
         }
         response = requests.post(API_URL, json=package_data)
