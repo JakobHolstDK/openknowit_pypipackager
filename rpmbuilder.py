@@ -335,8 +335,9 @@ for package in packages.find(query):
     print(package['name'])
     prettymysetuppy(package['name'],  package['version'])
     create_spec_file(package['name'],  package['version'])
-    query = {'name': package['name'], 'version': package['version']}
-    update = {'$set': {'rpmbuild': True}}
-    packages.update_one(query, update)
+
+    #query = {'name': package['name'], 'version': package['version']}
+    #update = {'$set': {'rpmbuild': True}}
+    #packages.update_one(query, update)
     #registerpypipackage(package['name'],  package['version'])
     
