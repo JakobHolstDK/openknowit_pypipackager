@@ -221,17 +221,13 @@ def prettymysetuppy(name, version):
      
   setupfile = ""
   if os.path.exists(setuppy_file):
-    with open(setuppy_file, 'r') as f:
-      contents = f.read()
-      contents = re.sub(r'^( +)', '', contents, flags=re.MULTILINE)
-      with open(setuppy_file, 'w') as f:
-        f.write(contents)
-
     with open(setuppy_file, 'r') as file:
       data = file.readlines()
       for line in data:
-        line = line.replace('^   [a-z]','').replace('  [A-Z]','')
+        if line == "   from":
+          line = line.replace("   from", "from")
         setupfile += line
+        
     prompt = PromptTemplate(
       input_variables=["setupfile"],
       template="Pretty this python setup-py file. the file has to have name : " + name + " and a version : " + version +"  : {setupfile}",
