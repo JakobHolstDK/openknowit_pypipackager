@@ -24,6 +24,8 @@ with open('requirements.txt') as f:
         package_data = {
             'name': package_name,
             'version': version_specifier,
+            'sourcedownloaded': False,
+            'specfilecreated': False,
             'rpmbuild': False,
             'debbuild': False
         }
