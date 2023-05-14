@@ -24,7 +24,8 @@ with open('requirements.txt') as f:
         package_data = {
             'name': package_name,
             'version': version_specifier,
-            'status': "initial",
+            'status': "initial", 
+            'hotfix': { 'filename': "", 'content': ""},
             'setuppy': False,
             'setuppyhotfix': False,
             'setupcfg': False,

@@ -8,6 +8,8 @@ import sys
 import toml 
 from langchain.prompts import PromptTemplate
 import json
+from flask import Flask, request, jsonify
+
 
 API_URL = os.getenv("PYPIAPI")
 MONGO_URI = os.getenv("MONGO")
@@ -32,6 +34,39 @@ def create_default_pyproject_toml(name, version):
         }
     }
     return (pyproject)
+
+
+
+
+
+
+
+
+def hotfixmysource(name, version):
+    pypi_packages = db['pypi_packages']
+    query = {'name': name, 'version': version}
+    if os.path.exists('setup.py.hotfixed'):
+      with open('setup.py.hotfixed', "r") as f:
+            content = f.read()
+      hotfix = {'filename': 'setup.py', 'content': content}
+      open('setup.py', 'w').write(content)
+      pypi_packages.update_one(query, {'$set': {'setuppyhotfix': True, 'hotfix': hotfix}})
+      return True
+    else:
+        query = {'name': name, 'version': version }
+        if pypi_packages.find_one(query):
+          package = jsonify({'success': False, 'message': 'PyPI package already registered'}) 
+          if package['setuppyhotfix']:
+            hotfix = package['hotfix']
+            open(hotfix['filename'], 'w').write(hotfix['content'])
+            return True
+          else:
+            return False
+        else:
+          return False  
+        
+
+    
 
 def createsetuppyfrompyprojecttoml(name, version):
   download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
@@ -322,9 +357,6 @@ def downloadpypipackage(name, version):
     newpackage = i[::-1].split('-', 1)[1][::-1]
     newversion = i[::-1].split('-', 1)[0][::-1].replace('.tar.gz', '').replace('.whl', '').replace('.zip', '')
 
-    print(newpackage)
-    print(newversion)
-  print(diff)
 
   #pip download --no-binary :all: -d /path/to/directory requests
 
@@ -354,10 +386,13 @@ for file in filenames(download_folder):
   if file.endswith('.zip'):
     if unpack_zip_file(file):
       print("Unpacked zip file")
+ 
 
 query = {'prettysetuppy': False}
 packages = db['pypi_packages']
+
 for package in packages.find(query):
+    hotfixmysource(package['name'],  package['version'])
     prettymysetuppy(package['name'],  package['version'])
     if os.path.exists(download_folder + package['name'] + '-' + package['version'] + '/pretty.setup.py'):
       query = {'name': package['name'], 'version': package['version']}
