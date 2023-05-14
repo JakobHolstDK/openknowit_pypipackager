@@ -24,7 +24,9 @@ with open('requirements.txt') as f:
         package_data = {
             'name': package_name,
             'version': version_specifier,
-            'seuppy': False,
+            'status': "initial",
+            'setuppy': False,
+            'setuppyhotfix': False,
             'setupcfg': False,
             'prettysetuppy': False,
             'pyprojecttoml': False,
