@@ -15,7 +15,9 @@ if len(sys.argv) > 1:
         heading = True
         newline = ''
         for char in line:
-            if char != ' ' or not heading:
+            if char == ' ' and heading:
+                print("Found space")
+            else:   
                 heading = False
                 newline = newline + char
 
