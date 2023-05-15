@@ -21,15 +21,24 @@ db = client['pypi-packages']
 
 
 def fix_indentation(filename):
+    # Use the filename variable for further processing
     with open(filename, 'r') as file:
         content = file.read()
-
-    # Use regular expressions to fix indentation
-    fixed_content = re.sub(r'^(\s*)(\w+)\s*=', r'\1  \2 =', content, flags=re.MULTILINE)
-
+    fixed_content = ""
+    for line in content.splitlines():
+        heading = True
+        spacecount = 0
+        newline = ''
+        for char in line:
+            if char == ' ' and heading:
+                spacecount = spacecount + 1
+            else:   
+                heading = False
+                print("Found non-space")
+                newline = newline + char
+        fixed_content = fixed_content + newline + '\n'
     with open(filename, 'w') as file:
         file.write(fixed_content)
-
 
 def create_default_pyproject_toml(name, version):
     pyproject = {

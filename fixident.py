@@ -13,17 +13,16 @@ if len(sys.argv) > 1:
     fixed_content = ""
     for line in content.splitlines():
         heading = True
+        spacecount = 0
         newline = ''
         for char in line:
             if char == ' ' and heading:
-                print("Found space")
+                spacecount = spacecount + 1
             else:   
                 heading = False
                 print("Found non-space")
                 newline = newline + char
-
         fixed_content = fixed_content + newline + '\n'
-
     with open(filename, 'w') as file:
         file.write(fixed_content)
 else:
