@@ -180,7 +180,22 @@ from setuptools import setup, find_packages
     packages=find_packages(),
   )
     """)
-      
+
+def convert_setup_cfg_to_setup_py(input_file, output_file):
+    with open(input_file, 'r') as cfg_file:
+        cfg_content = cfg_file.read()
+
+    py_content = '''
+from setuptools import setup
+
+setup(
+''' + cfg_content + ')'
+
+    with open(output_file, 'w') as py_file:
+        py_file.write(py_content)
+
+
+
 def replace_setupcfg_with_pyprojecttoml(setupcfg_file, pyprojecttoml_file, name, version):
 # Read the contents of setup.cfg
   config = configparser.ConfigParser()
@@ -408,12 +423,22 @@ for file in filenames(download_folder):
     if unpack_zip_file(file):
       print("Unpacked zip file")
  
+#setup.py does not exist but we have a setup.cfg file
+
+
 
 query = {'prettysetuppy': False}
 packages = db['pypi_packages']
 
 for package in packages.find(query):
     hotfixmysource(package['name'],  package['version'])
+    setupcfg_file = download_folder + package['name'] + '-' + package['version'] + '/setup.cfg'
+    setuppy_file = download_folder + package['name'] + '-' + package['version'] + '/setup.py'
+
+    if os.path.exists(setupcfg_file) and not os.path.exists(setuppy_file):
+      convert_setup_cfg_to_setup_py(setupcfg_file, setuppy_file)
+
+
     prettymysetuppy(package['name'],  package['version'])
     if os.path.exists(download_folder + package['name'] + '-' + package['version'] + '/pretty.setup.py'):
       query = {'name': package['name'], 'version': package['version']}
