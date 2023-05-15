@@ -53,7 +53,6 @@ def hotfixmysource(name, version):
       pypi_packages.update_one(query, {'$set': {'setuppyhotfix': True, 'hotfix': hotfix}})
       return True
     else:
-        print(name, version)
         query = {'name': name, 'version': version, 'setuppyhotfix': True  }
         if pypi_packages.find_one(query):
           package = pypi_packages.find_one(query)
@@ -418,6 +417,9 @@ for package in packages.find(query):
       query = {'name': package['name'], 'version': package['version']}
       update = {'$set': {'specfile': specfile, 'specfilecreated': True}}
       packages.update_one(query, update)
+    else:
+      print("No spec file found")
+      
 
 
     #query = {'name': package['name'], 'version': package['version']}
