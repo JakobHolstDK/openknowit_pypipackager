@@ -293,8 +293,8 @@ def create_spec_file(name, version):
   download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
   source_folder = download_folder + name + '-' + version
   setuppyhotfix_file = source_folder + '/' + 'setup.py.hotfixed'
-  if os.path.exists(source_folder):
-    setup_file  =setuppyhotfix_file
+  if os.path.exists(setuppyhotfix_file):
+    setup_file  = setuppyhotfix_file
     try:
       subprocess.call(["python3", "setup.py.hotfixed", "bdist_rpm", "--spec-only"], cwd=source_folder)
       return True
