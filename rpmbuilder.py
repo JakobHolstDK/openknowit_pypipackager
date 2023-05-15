@@ -54,15 +54,12 @@ def hotfixmysource(name, version):
       return True
     else:
         print(name, version)
-        query = {'name': name, 'version': version }
+        query = {'name': name, 'version': version, 'setuppyhotfix': True  }
         if pypi_packages.find_one(query):
-          package = jsonify({'success': False, 'message': 'PyPI package already registered'}) 
-          if package['setuppyhotfix']:
-            hotfix = package['hotfix']
-            open(hotfix['filename'], 'w').write(hotfix['content'])
-            return True
-          else:
-            return False
+          package = pypi_packages.find_one(query)
+          hotfix = package['hotfix']
+          open(hotfix['filename'], 'w').write(hotfix['content'])
+          return True
         else:
           return False  
         
