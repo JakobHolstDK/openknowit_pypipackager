@@ -245,11 +245,7 @@ def prettymysetuppy(name, version):
   setupcfg_file = source_folder + '/' + 'setup.cfg'
   prettysetuppy_file = source_folder + '/' + 'pretty.setup.py'
   pyprojecttoml_file = source_folder + '/' + 'pyproject.toml'
-  if os.path.exists(setupcfg_file):
-     checksetupcfg = open(setupcfg_file, 'r').read()
-     if 'name' in checksetupcfg:
-        replace_setupcfg_with_pyprojecttoml(setupcfg_file, pyprojecttoml_file, name, version)
-
+  
   if not os.path.exists(setuppy_file):
      if os.path.exists(pyprojecttoml_file):
        createsetuppyfrompyprojecttoml(name, version)
