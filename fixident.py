@@ -19,6 +19,7 @@ if len(sys.argv) > 1:
                 print("Found space")
             else:   
                 heading = False
+                print("Found non-space")
                 newline = newline + char
 
         fixed_content = fixed_content + newline + '\n'
