@@ -415,3 +415,10 @@ query = {'specfilecreated': True}
 packages = db['pypi_packages']
 for package in packages.find(query):
   print(package['name'] + '-' + package['version'] + ' has a spec file')
+
+
+query = {'specfilecreated': False}
+packages = db['pypi_packages']
+for package in packages.find(query):
+  print(package['name'] + '-' + package['version'] + ' has no spec file')
+
