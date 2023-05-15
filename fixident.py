@@ -17,7 +17,6 @@ if len(sys.argv) > 1:
             if char != ' ':
                 heading = False
                 newline = newline + char
-                break
         print(repr(line))
         print(repr(newline))
 
