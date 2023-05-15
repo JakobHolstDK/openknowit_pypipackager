@@ -19,6 +19,23 @@ AITOKEN = os.getenv("OPENAI_API_KEY")
 client = MongoClient(MONGO_URI)
 db = client['pypi-packages']
 
+
+def fix_indentation(filename):
+    with open(filename, 'r') as file:
+        content = file.read()
+
+    # Use regular expressions to fix indentation
+    fixed_content = re.sub(r'^(\s*)(\w+)\s*=', r'\1  \2 =', content, flags=re.MULTILINE)
+
+    with open(filename, 'w') as file:
+        file.write(fixed_content)
+
+# Usage: Provide the filename of the Python file to fix
+filename = 'setup.py'  # Replace with your desired filename
+fix_indentation(filename)
+print(f'Indentation fixed in {filename}.')
+
+
 def create_default_pyproject_toml(name, version):
     pyproject = {
         'tool': {
@@ -245,7 +262,7 @@ def prettymysetuppy(name, version):
   if not os.path.exists(setuppy_file):
      if os.path.exists(pyprojecttoml_file):
        createsetuppyfrompyprojecttoml(name, version)
-     
+   
   setupfile = ""
   if os.path.exists(setuppy_file):
     with open(setuppy_file, 'r') as file:
@@ -264,6 +281,8 @@ def prettymysetuppy(name, version):
     response = prompt.format(setupfile=setupfile)
     response = response.replace("Pretty this python setup-py file. the file has to have name : " + name + " and a version : " + version + "  : ", "")
     open(prettysetuppy_file, 'w').write(response)
+    fix_indentation(prettysetuppy_file)
+    
 
 def registerpypipackage(name, version):
   package_data = {
@@ -410,7 +429,7 @@ for package in packages.find(query):
     #update = {'$set': {'rpmbuild': True}}
     #packages.update_one(query, update)
     #registerpypipackage(package['name'],  package['version'])
-    
+
 print("-----------------------------------------------------------------------------------------------------")    
 query = {'specfilecreated': True}
 packages = db['pypi_packages']
