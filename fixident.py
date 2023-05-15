@@ -11,6 +11,8 @@ if len(sys.argv) > 1:
 
     # Use regular expressions to fix indentation
     fixed_content = re.sub(r'^(\s*)(\w+)\s*=', r'\1  \2 =', content, flags=re.MULTILINE)
+    print(fixed_content)
+    
 
     with open(filename, 'w') as file:
         file.write(fixed_content)
