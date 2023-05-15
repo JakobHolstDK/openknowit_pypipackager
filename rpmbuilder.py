@@ -304,15 +304,23 @@ def create_spec_file(name, version):
   setuppyhotfix_file = source_folder + '/' + 'setup.py.hotfixed'
   if os.path.exists(source_folder):
     setup_file  =setuppyhotfix_file
-  else:
-    setup_file  = download_folder + name + '-' + version + '/setup.py'
+    try:
+      subprocess.call(["python3", "setup.py.hotfixed", "bdist_rpm", "--spec-only"], cwd=source_folder)
+      return True
+    except:
+        print("Error creating spec file")
+        return False
+
+
   spec_file = source_folder + '/' + name + '.spec'
   #setup.py bdist_rpm --spec-only
   if os.path.exists(setup_file):
       try:
         subprocess.call(["python3", "setup.py", "bdist_rpm", "--spec-only"], cwd=source_folder)
+        return True
       except:
         print("Error creating spec file")
+
   else:
     print("No setup.py file found in source folder")
     setup_file  = download_folder + name + '-' + version + '/pretty.setup.py'
