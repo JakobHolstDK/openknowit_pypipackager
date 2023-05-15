@@ -411,14 +411,14 @@ for package in packages.find(query):
     #packages.update_one(query, update)
     #registerpypipackage(package['name'],  package['version'])
     
+print("-----------------------------------------------------------------------------------------------------")    
 query = {'specfilecreated': True}
 packages = db['pypi_packages']
 for package in packages.find(query):
   print(package['name'] + '-' + package['version'] + ' has a spec file')
-
-
+print("-----------------------------------------------------------------------------------------------------")    
 query = {'specfilecreated': False}
 packages = db['pypi_packages']
 for package in packages.find(query):
   print(package['name'] + '-' + package['version'] + ' has no spec file')
-
+print("-----------------------------------------------------------------------------------------------------")    

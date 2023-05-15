@@ -39,6 +39,7 @@ with open('requirements.txt') as f:
             'rpmfilepublished': False,
             'debbuild': False
         }
+
         response = requests.post(API_URL, json=package_data)
         if response.status_code == 200:
             print(f'Registered package: {package_name}')
