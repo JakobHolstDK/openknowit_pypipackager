@@ -53,6 +53,7 @@ def hotfixmysource(name, version):
       pypi_packages.update_one(query, {'$set': {'setuppyhotfix': True, 'hotfix': hotfix}})
       return True
     else:
+        print(name, version)
         query = {'name': name, 'version': version }
         if pypi_packages.find_one(query):
           package = jsonify({'success': False, 'message': 'PyPI package already registered'}) 
@@ -333,7 +334,7 @@ def create_spec_file(name, version):
 def unpack_gz_file(filename):
   print("Unpacking file")
   print(filename)
-  
+
   download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
   runme = subprocess.call(["tar", "-xzf", download_folder + filename, '-C' , download_folder])
   if runme == 0:
