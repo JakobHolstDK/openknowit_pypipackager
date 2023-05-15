@@ -11,8 +11,8 @@ if len(sys.argv) > 1:
 
     # Use regular expressions to fix indentation
     for line in content.splitlines():
-        print(repr(line))
-        
+        print(repr(line.replace(' ', '_')))
+
     fixed_content = re.sub(r'^(\s*)(\w+)\s*=', r'\1  \2 =', content, flags=re.MULTILINE)
     print(fixed_content)
 
