@@ -141,7 +141,6 @@ def createsetuppyfrompyprojecttoml(name, version):
 
     if not project and not poetry:
       print("The name in the pyproject.toml has no project or poetry entry with the same name as the package")
-      sys.exit(1)   
 
     # Generate the setup.py file
     with open(setuppy_file, "w") as f:
