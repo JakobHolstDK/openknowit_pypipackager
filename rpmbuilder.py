@@ -245,7 +245,7 @@ def prettymysetuppy(name, version):
   setupcfg_file = source_folder + '/' + 'setup.cfg'
   prettysetuppy_file = source_folder + '/' + 'pretty.setup.py'
   pyprojecttoml_file = source_folder + '/' + 'pyproject.toml'
-  
+
   if not os.path.exists(setuppy_file):
      if os.path.exists(pyprojecttoml_file):
        createsetuppyfrompyprojecttoml(name, version)
@@ -331,6 +331,9 @@ def create_spec_file(name, version):
 
 
 def unpack_gz_file(filename):
+  print("Unpacking file")
+  print(filename)
+  
   download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
   runme = subprocess.call(["tar", "-xzf", download_folder + filename, '-C' , download_folder])
   if runme == 0:
