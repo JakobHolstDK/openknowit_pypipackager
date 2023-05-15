@@ -30,11 +30,6 @@ def fix_indentation(filename):
     with open(filename, 'w') as file:
         file.write(fixed_content)
 
-# Usage: Provide the filename of the Python file to fix
-filename = 'setup.py'  # Replace with your desired filename
-fix_indentation(filename)
-print(f'Indentation fixed in {filename}.')
-
 
 def create_default_pyproject_toml(name, version):
     pyproject = {
