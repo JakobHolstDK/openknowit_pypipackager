@@ -10,6 +10,7 @@ if len(sys.argv) > 1:
         content = file.read()
 
     # Use regular expressions to fix indentation
+    fixed_content = ""
     for line in content.splitlines():
         heading = True
         newline = ''
@@ -17,12 +18,7 @@ if len(sys.argv) > 1:
             if char != ' ':
                 heading = False
                 newline = newline + char
-        print(repr(line))
-        print(repr(newline))
-
-    fixed_content = re.sub(r'^(\s*)(\w+)\s*=', r'\1  \2 =', content, flags=re.MULTILINE)
-    print(fixed_content)
-
+        fixed_content = fixed_content + newline + '\n'
 
     with open(filename, 'w') as file:
         file.write(fixed_content)
