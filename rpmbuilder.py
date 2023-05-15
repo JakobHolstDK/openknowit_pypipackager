@@ -305,7 +305,7 @@ def create_spec_file(name, version):
 
   spec_file = source_folder + '/' + name + '.spec'
   #setup.py bdist_rpm --spec-only
-  if os.path.exists(setup_file):
+  if os.path.exists(spec_file):
       try:
         subprocess.call(["python3", "setup.py", "bdist_rpm", "--spec-only"], cwd=source_folder)
         return True
