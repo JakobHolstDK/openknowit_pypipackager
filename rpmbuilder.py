@@ -281,8 +281,10 @@ def prettymysetuppy(name, version):
     response = prompt.format(setupfile=setupfile)
     response = response.replace("Pretty this python setup-py file. the file has to have name : " + name + " and a version : " + version + "  : ", "")
     open(prettysetuppy_file, 'w').write(response)
+
+    print(prettysetuppy_file)
     fix_indentation(prettysetuppy_file)
-    
+
 
 def registerpypipackage(name, version):
   package_data = {
