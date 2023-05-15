@@ -141,8 +141,6 @@ def createsetuppyfrompyprojecttoml(name, version):
 
     if not project and not poetry:
       print("The name in the pyproject.toml has no project or poetry entry with the same name as the package")
-      print("Please add a setup.py file to your project and upload it to your repository")
-      print("This will be fixed in the future")
       sys.exit(1)   
 
     # Generate the setup.py file
@@ -252,7 +250,6 @@ def prettymysetuppy(name, version):
     with open(setuppy_file, 'r') as file:
       data = file.readlines()
       for line in data:
-        print(line)
         if line == "   from":
           line = line.replace("   from", "from")
         line = line.replace("  seyup(", "setup(")
@@ -328,9 +325,6 @@ def create_spec_file(name, version):
 
 
 def unpack_gz_file(filename):
-  print("Unpacking file")
-  print(filename)
-
   download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
   runme = subprocess.call(["tar", "-xzf", download_folder + filename, '-C' , download_folder])
   if runme == 0:
@@ -339,14 +333,10 @@ def unpack_gz_file(filename):
   else:
     print("File not unpacked")
     return False
-  
-
-  
 
 def unpack_zip_file(filename):
    download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
    print("HELLLLLP")
-
 
 def unpack_whl_file(filename):
   download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
@@ -361,12 +351,8 @@ def downloadpypipackage(name, version):
   after = filenames(download_folder)
   diff = diflist(before, after)
   for i in diff:
-
     newpackage = i[::-1].split('-', 1)[1][::-1]
     newversion = i[::-1].split('-', 1)[0][::-1].replace('.tar.gz', '').replace('.whl', '').replace('.zip', '')
-
-
-  #pip download --no-binary :all: -d /path/to/directory requests
 
   for filename in os.listdir(download_folder):
         if filename.startswith(name + '-') and filename.endswith('.whl'):
@@ -389,8 +375,10 @@ download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
 for file in filenames(download_folder):
   if file.endswith('.gz'):  
     if unpack_gz_file(file):
-      print("Unpacked gz file")
-    
+      query = {'sourceunpacked': True}
+      update = {'$set': {'sourceunpacked': True}}
+      packages.update_one(query, update)
+
   if file.endswith('.zip'):
     if unpack_zip_file(file):
       print("Unpacked zip file")
@@ -409,17 +397,14 @@ for package in packages.find(query):
 
 query = {'specfilecreated': False}
 packages = db['pypi_packages']
+
 for package in packages.find(query):
-    print(package['name'])
     create_spec_file(package['name'],  package['version'])
     if os.path.exists(download_folder + package['name'] + '-' + package['version'] + '/dist/' + package['name'] + '.spec'):
       specfile = open(download_folder + package['name'] + '-' + package['version'] + '/dist/' + package['name'] + '.spec', 'r').read()
       query = {'name': package['name'], 'version': package['version']}
       update = {'$set': {'specfile': specfile, 'specfilecreated': True}}
       packages.update_one(query, update)
-    else:
-      print("No spec file found")
-      
 
 
     #query = {'name': package['name'], 'version': package['version']}
