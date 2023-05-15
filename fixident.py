@@ -20,8 +20,8 @@ if len(sys.argv) > 1:
                 heading = False
                 newline = newline + char
                 break
-    print(repr(line))
-    print(repr(newline))
+        print(repr(line))
+        print(repr(newline))
 
     fixed_content = re.sub(r'^(\s*)(\w+)\s*=', r'\1  \2 =', content, flags=re.MULTILINE)
     print(fixed_content)
