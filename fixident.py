@@ -14,9 +14,7 @@ if len(sys.argv) > 1:
         heading = True
         newline = ''
         for char in line:
-            if char == ' ':
-                continue
-            else:
+            if char != ' ':
                 heading = False
                 newline = newline + char
                 break
