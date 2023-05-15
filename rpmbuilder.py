@@ -328,7 +328,6 @@ def unpack_gz_file(filename):
   download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
   runme = subprocess.call(["tar", "-xzf", download_folder + filename, '-C' , download_folder])
   if runme == 0:
-    print("File unpacked")
     return True
   else:
     print("File not unpacked")
