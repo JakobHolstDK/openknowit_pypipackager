@@ -397,7 +397,6 @@ for package in packages.find(query):
 
 query = {'specfilecreated': False}
 packages = db['pypi_packages']
-
 for package in packages.find(query):
     create_spec_file(package['name'],  package['version'])
     if os.path.exists(download_folder + package['name'] + '-' + package['version'] + '/dist/' + package['name'] + '.spec'):
@@ -412,3 +411,7 @@ for package in packages.find(query):
     #packages.update_one(query, update)
     #registerpypipackage(package['name'],  package['version'])
     
+query = {'specfilecreated': True}
+packages = db['pypi_packages']
+for package in packages.find(query):
+  print(package['name'] + '-' + package['version'] + ' has a spec file')
