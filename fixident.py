@@ -15,9 +15,10 @@ if len(sys.argv) > 1:
         heading = True
         newline = ''
         for char in line:
-            if char != ' ':
+            if char != ' ' or not heading:
                 heading = False
                 newline = newline + char
+
         fixed_content = fixed_content + newline + '\n'
 
     with open(filename, 'w') as file:
