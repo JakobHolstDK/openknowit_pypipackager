@@ -174,7 +174,7 @@ from setuptools import setup, find_packages
     name="{project_name}",
     version="{project_version}",
     description="{project_description}",
-    license="{project_license}"replace_setupcfg_with_pyprojecttoml,
+    license="{project_license}",
     url="{project_url}",
     author="{project_authors}",
     packages=find_packages(),
@@ -289,8 +289,8 @@ def prettymysetuppy(name, version):
       for line in data:
         if line == "   from":
           line = line.replace("   from", "from")
-        line = line.replace("  seyup(", "setup(")
-        line = line.replace("   seyup(", "setup(")
+        line = line.replace("  setup(", "setup(")
+        line = line.replace("   setup(", "setup(")
         setupfile += line
 
     prompt = PromptTemplate(
@@ -434,9 +434,13 @@ for package in packages.find(query):
     hotfixmysource(package['name'],  package['version'])
     setupcfg_file = download_folder + package['name'] + '-' + package['version'] + '/setup.cfg'
     setuppy_file = download_folder + package['name'] + '-' + package['version'] + '/setup.py'
+    pyprojecttoml_file = download_folder + package['name'] + '-' + package['version'] + '/pyproject.toml'
+replace_setupcfg
+    if os.path.exists(setupcfg_file):
+      if (not os.path.exists(setuppy_file)) and (not os.path.exists(pyprojecttoml_file)):
+        convert_setup_cfg_to_setup_py(setupcfg_file, setuppy_file)
 
-    if os.path.exists(setupcfg_file) and not os.path.exists(setuppy_file):
-      convert_setup_cfg_to_setup_py(setupcfg_file, setuppy_file)
+    #  convert_setup_cfg_to_setup_py(setupcfg_file, setuppy_file)
 
 
     prettymysetuppy(package['name'],  package['version'])
