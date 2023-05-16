@@ -14,7 +14,8 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     data = pypipackages.find()
-    return render_template('main.html', data=sorted_data(data))
+    return render_template('main.html', data=sort_data(data))
+
 
 def sort_data(data):
     # Sort the data based on priority
