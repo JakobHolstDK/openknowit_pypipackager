@@ -390,11 +390,11 @@ for file in filenames(download_folder):
     if unpack_gz_file(file):
       print("Unpacked gz file")
       name = file.replace('.tar.gz', '')[::-1].split('-', 1)[-1][::-1]
-      print(name)
-#      query = {'name': package['name'], 'version': package['version']}
-#      update = {'$set': {'sourcefile': filename}, '$set': {'sourcedownloaded': True}}
-#      update = {'$set': {'sourcefile': filename}, '$set': {'status': 'sourcedownloaded'}}
-#      packages.update_one(query, update)
+      version = file.replace('.tar.gz', '')[::-1].split('-', 1)[0][::-1]
+
+      query = {'name': name, 'version': version}
+      update = {'$set': {'status': 'sourceunpacked'}}
+      packages.update_one(query, update)
 
   if file.endswith('.zip'):
     if unpack_zip_file(file):
