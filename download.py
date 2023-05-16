@@ -134,10 +134,10 @@ for package in packages.find(query):
     update = {'$set': {'sourcedownloaded': True}}
     packages.update_one(query, update)
     for download in downloads:
-      print("--------------------------")
-      print(download['package'])
-      print(package['name'])
-      print("--------------------------")
+      print("DEBUG: --------------------------")
+      print("DEBUG: " + download['package'])
+      print("DEBUG: " + package['name'])
+      print("DEBUG: --------------------------")
 
 
     update = {'$set': {'status': 'sourcedownloaded'}}
