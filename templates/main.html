@@ -60,10 +60,10 @@
           </th>
           </thead>
           <tbody>
-            {% for dependency in item.dependency %}
+            {% for download in item.downloads %}
             <tr>
-              <td>{{ dependency.name }}</td>
-              <td>{{ dependency.version }}</td>
+              <td>{{ download.name }}</td>
+              <td>{{ download.version }}</td>
             </tr>
             {% endfor %}
 
