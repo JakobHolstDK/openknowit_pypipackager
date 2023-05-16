@@ -1,5 +1,7 @@
 from flask import Flask, render_template
 from pymongo import MongoClient
+import os
+
 
 client = MongoClient(os.getenv("MONGO"))
 db = client['pypi-packages']
