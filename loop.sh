@@ -6,7 +6,7 @@ do
     git pull
     source venv/bin/activate
     source myenv
-    python donwload.py
+    python download.py
     python unpack.py
     sleep 10
 done
