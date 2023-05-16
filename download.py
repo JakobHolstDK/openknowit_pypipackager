@@ -77,7 +77,7 @@ def diflist(list1 , list2):
 def downloadpypipackage(name, version):
   download_folder = '/tmp/empty'
   try:
-    shutil.rmtree('dir_path')	
+    shutil.rmtree(download_folder)	
     os.rmdir(download_folder)
   except:
     pass  
