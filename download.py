@@ -57,14 +57,26 @@ def diflist(list1 , list2):
   return list_dif
 
 def downloadpypipackage(name, version):
-  download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
-  package_name = name + '==' + version
-  #subprocess.call(["pip", "download", "-d", download_folder, package_name])
-  before = filenames(download_folder)
-  subprocess.call(["pip", "download", '--no-binary' , ':all:',  "-d", download_folder, package_name])
-  after = filenames(download_folder)
-  diff = diflist(before, after)
+  try:
+    os.rmdir('/tmp/empty')
+  except:
+    pass  
+  os.mkdir('/tmp/empty')
+
+  download_folders = ["/tmp/empty", os.getenv('DOWNLOAD_FOLDER', '/tmp')]
   downloads = []
+  for download_folder in download_folders:
+  #download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
+    package_name = name + '==' + version
+  #subprocess.call(["pip", "download", "-d", download_folder, package_name])
+    if download_folder == '/tmp/empty':
+      before = filenames(download_folder)
+      
+    subprocess.call(["pip", "download", '--no-binary' , ':all:',  "-d", download_folder, package_name])
+    if download_folder == '/tmp/empty':
+      after = filenames(download_folder)
+
+  diff = diflist(before, after)
   for i in diff:
     newpackage = i[::-1].split('-', 1)[1][::-1]
     newversion = i[::-1].split('-', 1)[0][::-1].replace('.tar.gz', '').replace('.whl', '').replace('.zip', '')
