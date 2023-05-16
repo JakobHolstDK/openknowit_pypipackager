@@ -32,7 +32,7 @@ def registerpypipackage(name, version, dependency, parent):
             'version': version,
             'status': "initial", 
             'dependency': dependency,
-            'parent': parents,
+            'parents': parents,
             'hotfix': { 'filename': "", 'content': ""},
             'setuppy': False,
             'setuppyhotfix': False,
