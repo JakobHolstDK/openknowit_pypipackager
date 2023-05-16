@@ -104,31 +104,25 @@ def downloadpypipackage(name, version):
     newpackage = i[::-1].split('-', 1)[1][::-1]
     newversion = i[::-1].split('-', 1)[0][::-1].replace('.tar.gz', '').replace('.whl', '').replace('.zip', '')
     downloads.append({'filename': i, 'package': newpackage, 'version': newversion})
+
+    children = []
+    query = {'name': name, 'version': version}
+    if db['pypi_packages'].find_one(query):
+      print(f"Package {name} {version} already registered")
+      parent = packages.find_one(query)
+      children = parent['child']
+
     for download in downloads:
       query = {'name': download['package'], 'version': download['version']}
       unique_children = {}
-      children = []
-      if db['pypi_packages'].find_one(query):
-        print(f"Package {download['package']} {download['version']} already registered")
-        parent = packages.find_one(query)
-        children = parent['child']
-
       children.append({'name': name, 'version': version})
-      for baby in children:
-        print("-----------------------------------------------")
-        print(baby)
-        print("-----------------------------------------------")
 
-        #digest = baby['name'] + baby['version']
-        #unique_children[digest] = baby
-        
-        unique_children = list(unique_children.values())
-        update = {'$set': {'child': unique_children}}
-        packages.update_one(query, update)
-      else:
-        registerpypipackage(download['package'], download['version'], True, [{'name': name, 'version': version}])
-        for file in downloads:
-          shutil.copyfile( download_folder + '/' + file['filename'], destination_folder + "/" + file['filename'])
+      update = {'$set': {'child': children}}
+      packages.update_one(query, update)
+    else:
+      registerpypipackage(download['package'], download['version'], True, [{'name': name, 'version': version}])
+      for file in downloads:
+        shutil.copyfile( download_folder + '/' + file['filename'], destination_folder + "/" + file['filename'])
   return downloads
 
   
