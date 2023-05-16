@@ -88,7 +88,13 @@ def downloadpypipackage(name, version):
   packages = db['pypi_packages']
   downloads = []
   #download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
-  package_name = name + '==' + version
+  try:
+    package_name = name + '==' + version
+  except:
+    return []
+
+
+
   #subprocess.call(["pip", "download", "-d", download_folder, package_name])
   before = filenames(download_folder)
   subprocess.call(["pip", "download", '--no-binary' , ':all:',  "-d", download_folder, package_name])
