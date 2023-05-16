@@ -100,7 +100,7 @@ def downloadpypipackage(name, version):
         print(f"Package {download['package']} {download['version']} already registered")
         update = {'$push': {'downloads': download}}
         packages.update_one(query, update)
-        parent = package.find_one(query)
+        parent = packages.find_one(query)
         children = parent['child']
         children.append({'name': name, 'version': version})
         update = {'$set': {'child': children}}
