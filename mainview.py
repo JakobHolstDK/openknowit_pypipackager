@@ -5,7 +5,7 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     data = [...]  # Replace [...] with the actual data list
-    return render_template('templates/main.html', data=data)
+    return render_template('main.html', data=data)
 
 
 if __name__ == '__main__':
