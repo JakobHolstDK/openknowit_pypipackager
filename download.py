@@ -114,7 +114,9 @@ def downloadpypipackage(name, version):
         unique_children = {}
 
         for baby in children:
+          print("-----------------------------------------------")
           print(baby)
+          print("-----------------------------------------------")
 
           #digest = baby['name'] + baby['version']
           #unique_children[digest] = baby
