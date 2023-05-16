@@ -20,17 +20,34 @@ client = MongoClient(MONGO_URI)
 db = client['pypi-packages']
 
 
-def registerpypipackage(name, version):
+
+def registerpypipackage(name, version, dependency=False, child=[]):
   package_data = {
             'name': name,
             'version': version,
-            'status': "initial"
+            'status': "initial", 
+            'dependency': dependency,
+            'child': child,
+            'hotfix': { 'filename': "", 'content': ""},
+            'setuppy': False,
+            'setuppyhotfix': False,
+            'setupcfg': False,
+            'prettysetuppy': False,
+            'pyprojecttoml': False,
+            'sourcedownloaded': False,
+            'sourceunpacked': False,
+            'specfile': "",
+            'specfilecreated': False,
+            'rpmbuild': False,
+            'rpmfilepublished': False,
+            'debbuild': False
         }
   response = requests.post(API_URL, json=package_data)
   if response.status_code == 200:
     print(f'Registered package: {name}')
   else:
     print(f'Error registering package {name}: {response.text}')
+
 
 def updatepypipackage(name, version, status):
   package_data = {
@@ -57,30 +74,39 @@ def diflist(list1 , list2):
   return list_dif
 
 def downloadpypipackage(name, version):
+  download_folder = '/tmp/empty'
   try:
-    os.rmdir('/tmp/empty')
+    os.rmdir(download_folder)
   except:
     pass  
-  os.mkdir('/tmp/empty')
+  os.mkdir(download_folder)
 
-  download_folders = ["/tmp/empty", os.getenv('DOWNLOAD_FOLDER', '/tmp')]
+  packages = db['pypi_packages']
   downloads = []
-  for download_folder in download_folders:
   #download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
-    package_name = name + '==' + version
+  package_name = name + '==' + version
   #subprocess.call(["pip", "download", "-d", download_folder, package_name])
-    if download_folder == '/tmp/empty':
-      before = filenames(download_folder)
-      
-    subprocess.call(["pip", "download", '--no-binary' , ':all:',  "-d", download_folder, package_name])
-    if download_folder == '/tmp/empty':
-      after = filenames(download_folder)
-
+  before = filenames(download_folder)
+  subprocess.call(["pip", "download", '--no-binary' , ':all:',  "-d", download_folder, package_name])
+  after = filenames(download_folder)
   diff = diflist(before, after)
   for i in diff:
     newpackage = i[::-1].split('-', 1)[1][::-1]
     newversion = i[::-1].split('-', 1)[0][::-1].replace('.tar.gz', '').replace('.whl', '').replace('.zip', '')
     downloads.append({'filename': i, 'package': newpackage, 'version': newversion})
+    for download in downloads:
+      query = {'name': download['package'], 'version': download['version']}
+      if db['pypi_packages'].find_one(query):
+        print(f"Package {download['package']} {download['version']} already registered")
+        update = {'$push': {'downloads': download}}
+        packages.update_one(query, update)
+        parent = package.find_one(query)
+        children = parent['child']
+        children.append({'name': name, 'version': version})
+        update = {'$set': {'child': children}}
+        packages.update_one(query, update)
+      else:
+        registerpypipackage(download['package'], download['version'], True, [{'name': name, 'version': version}])
   return downloads
 
   
