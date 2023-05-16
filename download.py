@@ -23,13 +23,16 @@ db = client['pypi-packages']
 
 
 
-def registerpypipackage(name, version, dependency=False, child=[]):
+def registerpypipackage(name, version, dependency, parent):
+  parents = []
+  parents.append(parent)
+
   package_data = {
             'name': name,
             'version': version,
             'status': "initial", 
             'dependency': dependency,
-            'child': child,
+            'parent': parents,
             'hotfix': { 'filename': "", 'content': ""},
             'setuppy': False,
             'setuppyhotfix': False,
@@ -105,25 +108,19 @@ def downloadpypipackage(name, version):
     newversion = i[::-1].split('-', 1)[0][::-1].replace('.tar.gz', '').replace('.whl', '').replace('.zip', '')
     downloads.append({'filename': i, 'package': newpackage, 'version': newversion})
 
-    children = []
-    query = {'name': name, 'version': version}
-    if db['pypi_packages'].find_one(query):
-      print(f"Package {name} {version} already registered")
-      parent = packages.find_one(query)
-      children = parent['child']
+    parent = name + '==' + version
+
 
     for download in downloads:
       query = {'name': download['package'], 'version': download['version']}
-      unique_children = {}
-      children.append({'name': name, 'version': version})
-      unique_list = list(set(children))
-
-      update = {'$set': {'child': unique_list}}
-      packages.update_one(query, update)
-    else:
-      registerpypipackage(download['package'], download['version'], True, [{'name': name, 'version': version}])
-      for file in downloads:
-        shutil.copyfile( download_folder + '/' + file['filename'], destination_folder + "/" + file['filename'])
+      package = packages.find_one(query)
+      if package:
+        print(f"Package {download['package']} {download['version']} already exists")
+        # We should get the parent of this package and add it to the child list
+      else:
+        registerpypipackage(download['package'], download['version'], True, parent)
+        for file in downloads:
+          shutil.copyfile( download_folder + '/' + file['filename'], destination_folder + "/" + file['filename'])
   return downloads
 
   

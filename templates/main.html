@@ -50,31 +50,21 @@
       {% for item in data %}
       <tr>
         <td>{{ item.name }}</td>
-
-
-
         <td><table>
           <thead>
             <tr>
-              <th>relates to</th>
+              <th>Parents</th>
             </tr>
           </th>
           </thead>
           <tbody>
-            {% for baby in item.child %}
+            {% for parent in parents %}
             <tr>
-              <td>{{ baby.name }}</td>
-              <td>{{ baby.version }}</td>
+              <td>{{ parent }}</td>
             </tr>
             {% endfor %}
 
           </tbody></td></table></td>
-
-
-
-
-
-
         <td>{{ item.version }}</td>
         <td>{{ item.dependency }}</td>
         <td><table>
