@@ -40,6 +40,7 @@
     <thead>
       <tr>
         <th>Name</th>
+        <th>Relatives</th>
         <th>Version</th>
         <th>Dependency</th>
         <th>Status</th>
@@ -49,6 +50,31 @@
       {% for item in data %}
       <tr>
         <td>{{ item.name }}</td>
+
+
+
+        <td><table>
+          <thead>
+            <tr>
+              <th>relates to</th>
+            </tr>
+          </th>
+          </thead>
+          <tbody>
+            {% for baby in item.child %}
+            <tr>
+              <td>{{ baby.name }}</td>
+              <td>{{ baby.version }}</td>
+            </tr>
+            {% endfor %}
+
+          </tbody></td></table></td>
+
+
+
+
+
+
         <td>{{ item.version }}</td>
         <td>{{ item.dependency }}</td>
         <td><table>
