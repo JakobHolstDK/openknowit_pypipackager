@@ -116,8 +116,9 @@ def downloadpypipackage(name, version):
       query = {'name': download['package'], 'version': download['version']}
       unique_children = {}
       children.append({'name': name, 'version': version})
+      unique_list = list(set(children))
 
-      update = {'$set': {'child': children}}
+      update = {'$set': {'child': unique_list}}
       packages.update_one(query, update)
     else:
       registerpypipackage(download['package'], download['version'], True, [{'name': name, 'version': version}])
