@@ -106,20 +106,22 @@ def downloadpypipackage(name, version):
     downloads.append({'filename': i, 'package': newpackage, 'version': newversion})
     for download in downloads:
       query = {'name': download['package'], 'version': download['version']}
+      unique_children = {}
+      children = []
       if db['pypi_packages'].find_one(query):
         print(f"Package {download['package']} {download['version']} already registered")
         parent = packages.find_one(query)
         children = parent['child']
-        children.append({'name': name, 'version': version})
-        unique_children = {}
 
-        for baby in children:
-          print("-----------------------------------------------")
-          print(baby)
-          print("-----------------------------------------------")
+      children.append({'name': name, 'version': version})
+      for baby in children:
+        print("-----------------------------------------------")
+        print(baby)
+        print("-----------------------------------------------")
 
-          #digest = baby['name'] + baby['version']
-          #unique_children[digest] = baby
+        #digest = baby['name'] + baby['version']
+        #unique_children[digest] = baby
+        
         unique_children = list(unique_children.values())
         update = {'$set': {'child': unique_children}}
         packages.update_one(query, update)
