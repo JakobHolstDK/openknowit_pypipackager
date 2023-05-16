@@ -407,6 +407,10 @@ for file in filenames(download_folder):
           print("Unpacked zip file")
     continue
   else:
+    print("Registering package")
+    registerpypipackage(name, version)
+    print("Unpacking source file")
+    
     if file.endswith('.gz'):  
       if unpack_gz_file(file):
         print("Unpacked gz file")
