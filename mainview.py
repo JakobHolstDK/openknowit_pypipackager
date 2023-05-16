@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    data = pypipackages.find() 
+    data = pypipackages.find().__ordering__(('status', 'asc'))
     return render_template('main.html', data=data)
 
 
