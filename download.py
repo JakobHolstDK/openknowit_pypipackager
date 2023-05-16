@@ -4,6 +4,7 @@ import re
 import subprocess
 import os
 import requests
+import shutil
 import sys
 import toml 
 from langchain.prompts import PromptTemplate
@@ -109,7 +110,7 @@ def downloadpypipackage(name, version):
       else:
         registerpypipackage(download['package'], download['version'], True, [{'name': name, 'version': version}])
         for file in downloads:
-          os.cp(download_folder + '/' + file['filename'], destination_folder + "/" + file['filename'])
+          shutil.copyfile( download_folder + '/' + file['filename'], destination_folder + "/" + file['filename'])
   return downloads
 
   
