@@ -76,6 +76,7 @@ def diflist(list1 , list2):
 
 def downloadpypipackage(name, version):
   download_folder = '/tmp/empty'
+  destination_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
   try:
     shutil.rmtree(download_folder)	
     os.rmdir(download_folder)
@@ -107,6 +108,8 @@ def downloadpypipackage(name, version):
         packages.update_one(query, update)
       else:
         registerpypipackage(download['package'], download['version'], True, [{'name': name, 'version': version}])
+        for file in downloads:
+          os.cp(download_folder + '/' + file['filename'], destination_folder + "/" + file['filename'])
   return downloads
 
   
@@ -122,6 +125,8 @@ for package in packages.find(query):
       packages.update_one(query, update)
     query = {'name': package['name'], 'version': package['version']}
     update = {'$set': {'sourcedownloaded': True}}
+    packages.update_one(query, update)
+    update = {'$set': {'status': 'sourcedownloaded'}}
     packages.update_one(query, update)
     print(f"Downloaded source for {package['name']} {package['version']}")
 
