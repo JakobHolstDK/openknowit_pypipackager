@@ -305,11 +305,12 @@ def prettymysetuppy(name, version):
     fix_indentation(prettysetuppy_file)
 
 
-def registerpypipackage(name, version):
+def registerpypipackage(name, version, dependency=False):
   package_data = {
             'name': name,
             'version': version,
             'status': "initial", 
+            'dependency': dependency,
             'hotfix': { 'filename': "", 'content': ""},
             'setuppy': False,
             'setuppyhotfix': False,
@@ -420,7 +421,7 @@ for file in filenames(download_folder):
     continue
   else:
     print("Registering package")
-    registerpypipackage(name, version)
+    registerpypipackage(name, version, dependency=True)
     print("Unpacking source file")
 
     if file.endswith('.gz'):  
