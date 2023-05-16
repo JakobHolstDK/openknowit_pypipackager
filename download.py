@@ -8,6 +8,7 @@ import sys
 import toml 
 from langchain.prompts import PromptTemplate
 import json
+import shutil
 from flask import Flask, request, jsonify
 
 
@@ -76,10 +77,10 @@ def diflist(list1 , list2):
 def downloadpypipackage(name, version):
   download_folder = '/tmp/empty'
   try:
+    shutil.rmtree('dir_path')	
     os.rmdir(download_folder)
   except:
     pass  
-  os.rmdir(download_folder)
   os.mkdir(download_folder)
 
   packages = db['pypi_packages']
