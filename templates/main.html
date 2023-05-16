@@ -62,8 +62,9 @@
           <tbody>
             {% for download in item.downloads %}
             <tr>
-              <td>{{ download.name }}</td>
+              <td>{{ download.package }}</td>
               <td>{{ download.version }}</td>
+              <td>{{ download.filename }}</td>
             </tr>
             {% endfor %}
 

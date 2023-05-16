@@ -78,6 +78,7 @@ packages = db['pypi_packages']
 for package in packages.find(query):
     downloads = downloadpypipackage(package['name'], package['version'])
     for download in downloads:
+      print(download)
       query = {'name': package['name'], 'version': package['version']}
       update = {'$push': {'downloads': download}}
       packages.update_one(query, update)
@@ -86,6 +87,6 @@ for package in packages.find(query):
     packages.update_one(query, update)
     print(f"Downloaded source for {package['name']} {package['version']}")
 
-    
+
 
 
