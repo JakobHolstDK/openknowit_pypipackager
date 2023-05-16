@@ -1,10 +1,17 @@
 from flask import Flask, render_template
+from pymongo import MongoClient
+
+client = MongoClient(os.getenv("MONGO"))
+db = client['pypi-packages']
+pypipackages = db['pypi_packages']
+
 
 app = Flask(__name__)
 
+
 @app.route('/')
 def index():
-    data = [...]  # Replace [...] with the actual data list
+    data = pypipackages.find() 
     return render_template('main.html', data=data)
 
 
