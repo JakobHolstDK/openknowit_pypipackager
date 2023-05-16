@@ -111,8 +111,8 @@ def downloadpypipackage(name, version):
         parent = packages.find_one(query)
         children = parent['child']
         children.append({'name': name, 'version': version})
-        children.unique()
-        update = {'$set': {'child': children}}
+        unique_children = list({(baby['name'], baby['version']) for baby in children})
+        update = {'$set': {'child': unique_children}}
         packages.update_one(query, update)
       else:
         registerpypipackage(download['package'], download['version'], True, [{'name': name, 'version': version}])
