@@ -386,17 +386,22 @@ query = {'sourcedownloaded': False}
 packages = db['pypi_packages']
 download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
 for file in filenames(download_folder):
-  if file.endswith('.gz'):  
-    if unpack_gz_file(file):
-      print("Unpacked gz file")
-      name = file.replace('.tar.gz', '')[::-1].split('-', 1)[-1][::-1]
-      version = file.replace('.tar.gz', '')[::-1].split('-', 1)[0][::-1]
+  name = file.replace('.tar.gz', '')[::-1].split('-', 1)[-1][::-1]
+  version = file.replace('.tar.gz', '')[::-1].split('-', 1)[0][::-1]
+  query = {'name': name, 'version': version}
+  package = packages.find_one(query)
+  if package:
+    print("Package already exists")
+    continue
+  else:
+    if file.endswith('.gz'):  
+      if unpack_gz_file(file):
+        print("Unpacked gz file")
+        query = {'name': name, 'version': version}
+        update = {'$set': {'status': 'sourceunpacked'}}
+        packages.update_one(query, update)
 
-      query = {'name': name, 'version': version}
-      update = {'$set': {'status': 'sourceunpacked'}}
-      packages.update_one(query, update)
-
-  if file.endswith('.zip'):
-    if unpack_zip_file(file):
-      print("Unpacked zip file")
+    if file.endswith('.zip'):
+      if unpack_zip_file(file):
+        print("Unpacked zip file")
  
