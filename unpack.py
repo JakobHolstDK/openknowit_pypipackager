@@ -309,7 +309,19 @@ def registerpypipackage(name, version):
   package_data = {
             'name': name,
             'version': version,
+            'status': "initial", 
+            'hotfix': { 'filename': "", 'content': ""},
+            'setuppy': False,
+            'setuppyhotfix': False,
+            'setupcfg': False,
+            'prettysetuppy': False,
+            'pyprojecttoml': False,
+            'sourcedownloaded': False,
+            'sourceunpacked': False,
+            'specfile': "",
+            'specfilecreated': False,
             'rpmbuild': False,
+            'rpmfilepublished': False,
             'debbuild': False
         }
   response = requests.post(API_URL, json=package_data)
@@ -410,7 +422,7 @@ for file in filenames(download_folder):
     print("Registering package")
     registerpypipackage(name, version)
     print("Unpacking source file")
-    
+
     if file.endswith('.gz'):  
       if unpack_gz_file(file):
         print("Unpacked gz file")
