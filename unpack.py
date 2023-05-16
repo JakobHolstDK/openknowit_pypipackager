@@ -392,7 +392,7 @@ for file in filenames(download_folder):
   package = packages.find_one(query)
   if package:
     print("Package already exists")
-    print(package['sourcealreadyunpacked'])
+    print(package['sourceunpacked'])
     continue
   else:
     if file.endswith('.gz'):  
