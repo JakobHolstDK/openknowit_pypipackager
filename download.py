@@ -64,26 +64,28 @@ def downloadpypipackage(name, version):
   subprocess.call(["pip", "download", '--no-binary' , ':all:',  "-d", download_folder, package_name])
   after = filenames(download_folder)
   diff = diflist(before, after)
+  downloads = []
   for i in diff:
     newpackage = i[::-1].split('-', 1)[1][::-1]
     newversion = i[::-1].split('-', 1)[0][::-1].replace('.tar.gz', '').replace('.whl', '').replace('.zip', '')
+    downloads.append({'filename': i, 'package': newpackage, 'version': newversion})
+  return downloads
 
-  for filename in os.listdir(download_folder):
-        if filename.startswith(name + '-') and filename.endswith('.whl'):
-            return os.path.join(download_folder, filename)
-  for filename in os.listdir(download_folder):
-        name = name.replace('-','_')
-        if filename.startswith(name + '-') and filename.endswith('.whl'):
-            return os.path.join(download_folder, filename)
-  return None
+  
 
 query = {'sourcedownloaded': False}
 packages = db['pypi_packages']
 for package in packages.find(query):
-    filename = downloadpypipackage(package['name'], package['version'])
+    downloads = downloadpypipackage(package['name'], package['version'])
+    for download in downloads:
+      query = {'name': package['name'], 'version': package['version']}
+      update = {'$push': {'downloads': download}}
+      packages.update_one(query, update)
     query = {'name': package['name'], 'version': package['version']}
-    update = {'$set': {'sourcefile': filename}, '$set': {'sourcedownloaded': True}}
-    update = {'$set': {'sourcefile': filename}, '$set': {'status': 'sourcedownloaded'}}
+    update = {'$set': {'sourcedownloaded': True}}
     packages.update_one(query, update)
-    print(f'Downloaded {package["name"]}')
+    print(f"Downloaded source for {package['name']} {package['version']}")
+
+    
+
 

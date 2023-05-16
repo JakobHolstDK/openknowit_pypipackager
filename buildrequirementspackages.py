@@ -26,6 +26,7 @@ with open('requirements.txt') as f:
             'version': version_specifier,
             'status': "initial", 
             'dependency': False,
+            'downloads': [],
             'hotfix': { 'filename': "", 'content': ""},
             'setuppy': False,
             'setuppyhotfix': False,
