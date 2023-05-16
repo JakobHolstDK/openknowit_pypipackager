@@ -79,6 +79,7 @@ def downloadpypipackage(name, version):
     os.rmdir(download_folder)
   except:
     pass  
+  os.rmdir(download_folder)
   os.mkdir(download_folder)
 
   packages = db['pypi_packages']
