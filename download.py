@@ -83,7 +83,7 @@ for package in packages.find(query):
     filename = downloadpypipackage(package['name'], package['version'])
     query = {'name': package['name'], 'version': package['version']}
     update = {'$set': {'sourcefile': filename}, '$set': {'sourcedownloaded': True}}
+    update = {'$set': {'sourcefile': filename}, '$set': {'status': 'sourcedownloaded'}}
     packages.update_one(query, update)
     print(f'Downloaded {package["name"]}')
-    updatepypipackage(package['name'], package['version'], 'downloaded')
-    
+
