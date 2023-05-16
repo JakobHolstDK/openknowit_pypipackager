@@ -51,6 +51,23 @@
         <td>{{ item.name }}</td>
         <td>{{ item.version }}</td>
         <td>{{ item.dependency }}</td>
+        <td><table>
+          <thead>
+            <tr>
+              <th>Dependency Name</th>
+              <th>Dependency Version</th>
+            </tr>
+          </th>
+          </thead>
+          <tbody>
+            {% for dependency in item.dependency %}
+            <tr>
+              <td>{{ dependency.name }}</td>
+              <td>{{ dependency.version }}</td>
+            </tr>
+            {% endfor %}
+
+          </tbody></td></table></td>
         <td>{{ item.status }}</td>
       </tr>
       {% endfor %}
