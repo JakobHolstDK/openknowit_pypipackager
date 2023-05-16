@@ -393,6 +393,18 @@ for file in filenames(download_folder):
   if package:
     print("Package already exists")
     print(package['sourceunpacked'])
+    if package['sourceunpacked'] == False:
+      print("Unpacking source file")
+      if file.endswith('.gz'):  
+        if unpack_gz_file(file):
+          print("Unpacked gz file")
+          query = {'name': name, 'version': version}
+          update = {'$set': {'status': 'sourceunpacked'}}
+          packages.update_one(query, update)
+
+      if file.endswith('.zip'):
+        if unpack_zip_file(file):
+          print("Unpacked zip file")
     continue
   else:
     if file.endswith('.gz'):  
