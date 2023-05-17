@@ -382,72 +382,7 @@ def unpack_whl_file(filename):
   download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
   subprocess.call(["wheel", "unpack", filename, '--dest' , download_folder])
 
-def downloadpypipackage(name, version):
-  download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
-  package_name = name + '==' + version
-  #subprocess.call(["pip", "download", "-d", download_folder, package_name])
-  before = filenames(download_folder)
-  subprocess.call(["pip", "download", '--no-binary' , ':all:',  "-d", download_folder, package_name])
-  after = filenames(download_folder)
-  diff = diflist(before, after)
-  for i in diff:
-    newpackage = i[::-1].split('-', 1)[1][::-1]
-    newversion = i[::-1].split('-', 1)[0][::-1].replace('.tar.gz', '').replace('.whl', '').replace('.zip', '')
-
-  for filename in os.listdir(download_folder):
-        if filename.startswith(name + '-') and filename.endswith('.whl'):
-            return os.path.join(download_folder, filename)
-  for filename in os.listdir(download_folder):
-        name = name.replace('-','_')
-        if filename.startswith(name + '-') and filename.endswith('.whl'):
-            return os.path.join(download_folder, filename)
-  return None
-
-query = {'sourcedownloaded': False}
-packages = db['pypi_packages']
-for package in packages.find(query):
-    filename = downloadpypipackage(package['name'], package['version'])
-    query = {'name': package['name'], 'version': package['version']}
-    update = {'$set': {'sourcefile': filename}, '$set': {'sourcedownloaded': True}}
-    packages.update_one(query, update)
-
 download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
-for file in filenames(download_folder):
-  if file.endswith('.gz'):  
-    if unpack_gz_file(file):
-      query = {'sourceunpacked': True}
-      update = {'$set': {'sourceunpacked': True}}
-      packages.update_one(query, update)
-
-  if file.endswith('.zip'):
-    if unpack_zip_file(file):
-      print("Unpacked zip file")
- 
-#setup.py does not exist but we have a setup.cfg file
-
-
-
-query = {'prettysetuppy': False}
-packages = db['pypi_packages']
-
-for package in packages.find(query):
-    hotfixmysource(package['name'],  package['version'])
-    setupcfg_file = download_folder + package['name'] + '-' + package['version'] + '/setup.cfg'
-    setuppy_file = download_folder + package['name'] + '-' + package['version'] + '/setup.py'
-    pyprojecttoml_file = download_folder + package['name'] + '-' + package['version'] + '/pyproject.toml'
-    if os.path.exists(setupcfg_file):
-      if (not os.path.exists(setuppy_file)) and (not os.path.exists(pyprojecttoml_file)):
-        convert_setup_cfg_to_setup_py(setupcfg_file, setuppy_file)
-
-    #  convert_setup_cfg_to_setup_py(setupcfg_file, setuppy_file)
-
-
-    prettymysetuppy(package['name'],  package['version'])
-    if os.path.exists(download_folder + package['name'] + '-' + package['version'] + '/pretty.setup.py'):
-      query = {'name': package['name'], 'version': package['version']}
-      update = {'$set': {'prettysetuppy': True}}
-      packages.update_one(query, update)
-
 query = {'specfilecreated': False}
 packages = db['pypi_packages']
 for package in packages.find(query):
