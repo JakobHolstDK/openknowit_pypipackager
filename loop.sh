@@ -8,5 +8,7 @@ do
     source myenv
     python download.py
     python unpack.py
+    python createspecfiles.py
+    
     sleep 10
 done
