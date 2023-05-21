@@ -11,6 +11,7 @@ import json
 from flask import Flask, request, jsonify
 
 
+
 API_URL = os.getenv("PYPIAPI")
 MONGO_URI = os.getenv("MONGO")
 AITOKEN = os.getenv("OPENAI_API_KEY")
@@ -386,6 +387,7 @@ download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
 query = {'specfilecreated': False}
 packages = db['pypi_packages']
 for package in packages.find(query):
+    print(package)
     create_spec_file(package['name'],  package['version'])
     if os.path.exists(download_folder + package['name'] + '-' + package['version'] + '/dist/' + package['name'] + '.spec'):
       specfile = open(download_folder + package['name'] + '-' + package['version'] + '/dist/' + package['name'] + '.spec', 'r').read()
