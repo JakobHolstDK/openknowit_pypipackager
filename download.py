@@ -139,7 +139,10 @@ def downloadpypipackage(name, version):
       else:
         registerpypipackage(download['package'], download['version'], True, parent)
         for file in downloads:
-          shutil.copyfile( download_folder + '/' + file['filename'], destination_folder + "/" + file['filename'])
+          try:
+            shutil.copyfile( download_folder + '/' + file['filename'], destination_folder + "/" + file['filename'])
+          except:
+            pass
   return downloads
 
   
