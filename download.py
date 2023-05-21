@@ -1,5 +1,7 @@
 from pymongo import MongoClient
 import configparser
+import pprint
+
 import re
 import subprocess
 import os
@@ -12,6 +14,7 @@ import json
 import shutil
 from flask import Flask, request, jsonify
 
+pp = pprint.PrettyPrinter(indent=4)
 
 API_URL = os.getenv("PYPIAPI")
 MONGO_URI = os.getenv("MONGO")
@@ -100,7 +103,11 @@ def downloadpypipackage(name, version):
 
   #subprocess.call(["pip", "download", "-d", download_folder, package_name])
   before = filenames(download_folder)
-  subprocess.call(["pip", "download", '--no-binary' , ':all:',  "-d", download_folder, package_name])
+  myjob = subprocess.call(["pip", "download", '--no-binary' , ':all:',  "-d", download_folder, package_name])
+  pp.pprint(myjob)
+  
+
+
   after = filenames(download_folder)
   diff = diflist(before, after)
   for i in diff:
