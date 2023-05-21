@@ -355,10 +355,10 @@ def unpack_whl_file(filename):
   subprocess.call(["wheel", "unpack", filename, '--dest' , download_folder])
 
 download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
-query = {'specfilecreated': False}
+query = {'specfilecreated': False, 'sourcedownload': 'True'}
 packages = db['pypi_packages']
 #for package in packages.find(query):
-for package in packages.find():
+for package in packages.find(query):
     print(package)
     # Try to use the setup.py file to create a spec file
     create_spec_file(package['name'],  package['version'], "setup.py")
