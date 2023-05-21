@@ -145,6 +145,10 @@ def downloadpypipackage(name, version):
 query = {'sourcedownloaded': False}
 packages = db['pypi_packages']
 for package in packages.find(query):
+    if package['name'] == name:
+      print(f"Package {name} already exists")
+      continue
+    
     downloads = downloadpypipackage(package['name'], package['version'])
     for download in downloads:
       print(download)
