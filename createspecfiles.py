@@ -330,39 +330,10 @@ def diflist(list1 , list2):
   list_dif = [i for i in list1 + list2 if i not in list1 or i not in list2]
   return list_dif
 
-def create_spec_file(name, version):
+def create_spec_file(name, version, setup_file):
   download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
   source_folder = download_folder + name + '-' + version
-  setuppyhotfix_file = source_folder + '/' + 'setup.py.hotfixed'
-  if os.path.exists(setuppyhotfix_file):
-    setup_file  = setuppyhotfix_file
-    try:
-      subprocess.call(["python3", "setup.py.hotfixed", "bdist_rpm", "--spec-only"], cwd=source_folder)
-      return True
-    except:
-        print("Error creating spec file")
-        return False
-
-
-  spec_file = source_folder + '/' + name + '.spec'
-  #setup.py bdist_rpm --spec-only
-  if os.path.exists(spec_file):
-      try:
-        subprocess.call(["python3", "setup.py", "bdist_rpm", "--spec-only"], cwd=source_folder)
-        return True
-      except:
-        print("Error creating spec file")
-
-  else:
-    print("No setup.py file found in source folder")
-    setup_file  = download_folder + name + '-' + version + '/pretty.setup.py'
-    if os.path.exists(setup_file):
-      try:
-        subprocess.call(["python3", "pretty.setup.py", "bdist_rpm", "--spec-only"], cwd=source_folder)
-      except:
-        print("Error creating spec file")
-    else:
-      print("No pretty.setup.py file found in source folder")
+  subprocess.call(["python3", setup_file, "bdist_rpm", "--spec-only"], cwd=source_folder)
   
 
 
@@ -389,12 +360,38 @@ packages = db['pypi_packages']
 #for package in packages.find(query):
 for package in packages.find():
     print(package)
-    create_spec_file(package['name'],  package['version'])
+    # Try to use the setup.py file to create a spec file
+    create_spec_file(package['name'],  package['version'], "setup.py")
     if os.path.exists(download_folder + package['name'] + '-' + package['version'] + '/dist/' + package['name'] + '.spec'):
       specfile = open(download_folder + package['name'] + '-' + package['version'] + '/dist/' + package['name'] + '.spec', 'r').read()
       query = {'name': package['name'], 'version': package['version']}
       update = {'$set': {'specfile': specfile, 'specfilecreated': True}}
-      packages.update_one(query, update)
+      packages.update_one(query, update)  
+      print("Spec file created")
+    else:
+      print("No spec file created from original setup.py file")
+    # Try to use the pyproject.toml file to create a spec file
+    create_spec_file(package['name'],  package['version'], "pyproject.toml")
+    if os.path.exists(download_folder + package['name'] + '-' + package['version'] + '/dist/' + package['name'] + '.spec'):
+      specfile = open(download_folder + package['name'] + '-' + package['version'] + '/dist/' + package['name'] + '.spec', 'r').read()
+      query = {'name': package['name'], 'version': package['version']}
+      update = {'$set': {'specfile': specfile, 'specfilecreated': True}}
+      packages.update_one(query, update)  
+      print("Spec file created using pyproject.toml")
+    else:
+      print("No spec file created") 
+    # Try to use the setup.cfg file to create a spec file
+    create_spec_file(package['name'],  package['version'], "setup.cfg")
+    if os.path.exists(download_folder + package['name'] + '-' + package['version'] + '/dist/' + package['name'] + '.spec'):
+      specfile = open(download_folder + package['name'] + '-' + package['version'] + '/dist/' + package['name'] + '.spec', 'r').read()
+      query = {'name': package['name'], 'version': package['version']}
+      update = {'$set': {'specfile': specfile, 'specfilecreated': True}}
+      packages.update_one(query, update)  
+      print("Spec file created using setup.cfg")
+    else:
+      print("No spec file created")
+    
+      
 
 
     #query = {'name': package['name'], 'version': package['version']}
