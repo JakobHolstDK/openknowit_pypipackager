@@ -163,8 +163,8 @@ for package in packages.find(query):
       print("DEBUG: --------------------------")
 
 
-    update = {'$set': {'status': 'sourcedownloaded'}}
-    packages.update_one(query, update)
+    #update = {'$set': {'status': 'sourcedownloaded'}}
+    #packages.update_one(query, update)
     print(f"Downloaded source for {package['name']} {package['version']}")
 
 
