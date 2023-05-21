@@ -105,7 +105,7 @@ def downloadpypipackage(name, version):
   before = filenames(download_folder)
   myjob = subprocess.call(["pip", "download", '--no-binary' , ':all:',  "-d", download_folder, package_name], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
   print("--------------------------------------------------------------")
-  pp.pprint(myjob.stdout)
+  pp.pprint(myjob.communicate())
   print("--------------------------------------------------------------")
   
 
