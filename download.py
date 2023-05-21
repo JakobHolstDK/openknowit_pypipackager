@@ -123,6 +123,8 @@ def downloadpypipackage(name, version):
   for i in diff:
     newpackage = i[::-1].split('-', 1)[1][::-1]
     newversion = i[::-1].split('-', 1)[0][::-1].replace('.tar.gz', '').replace('.whl', '').replace('.zip', '')
+    if newpackage == name:
+      continue
     downloads.append({'filename': i, 'package': newpackage, 'version': newversion})
 
     parent = name + '==' + version
@@ -145,10 +147,6 @@ def downloadpypipackage(name, version):
 query = {'sourcedownloaded': False}
 packages = db['pypi_packages']
 for package in packages.find(query):
-    if package['name'] == name:
-      print(f"Package {name} already exists")
-      continue
-    
     downloads = downloadpypipackage(package['name'], package['version'])
     for download in downloads:
       print(download)
