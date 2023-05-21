@@ -386,7 +386,8 @@ def unpack_whl_file(filename):
 download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
 query = {'specfilecreated': False}
 packages = db['pypi_packages']
-for package in packages.find(query):
+#for package in packages.find(query):
+for package in packages.find():
     print(package)
     create_spec_file(package['name'],  package['version'])
     if os.path.exists(download_folder + package['name'] + '-' + package['version'] + '/dist/' + package['name'] + '.spec'):
