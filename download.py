@@ -104,11 +104,10 @@ def downloadpypipackage(name, version):
   #subprocess.call(["pip", "download", "-d", download_folder, package_name])
   before = filenames(download_folder)
   process = subprocess.run(["pip", "download", '--no-binary' , ':all:',  "-d", download_folder, package_name], capture_output=True, text=True)
-
-  print("--------------------------------------------------------------")
-  pp.pprint(process)
-  print("--------------------------------------------------------------")
-  
+  if process.returncode != 0:
+    query = {'name': package['name'], 'version': package['version']}
+    update = {'$set': {'sourcedownloaded': True, 'status': "Source downloaded"}, }
+    packages.update_one(query, update)
 
 
   after = filenames(download_folder)
