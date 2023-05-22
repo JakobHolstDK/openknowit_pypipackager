@@ -145,30 +145,22 @@ def downloadpypipackage(name, version):
             pass
   return downloads
 
-  
 
-query = {'sourcedownloaded': False}
-packages = db['pypi_packages']
-for package in packages.find(query):
+emptyq = False  
+while emptyq:
+  query = {'sourcedownloaded': False}
+  packages = db['pypi_packages']
+  print("we have %d number of downloads missing" % len(packages))
+  if len(packages) > 0:
+    print("we have %d number of downloads missing" % len(packages))
+
+  
+  for package in packages.find(query):
     downloads = downloadpypipackage(package['name'], package['version'])
     for download in downloads:
-      print(download)
       query = {'name': package['name'], 'version': package['version']}
       update = {'$push': {'downloads': download}}
       packages.update_one(query, update)
-    query = {'name': package['name'], 'version': package['version']}
-    update = {'$set': {'sourcedownloaded': True}}
-    packages.update_one(query, update)
-    for download in downloads:
-      print("DEBUG: --------------------------")
-      print("DEBUG: " + download['package'])
-      print("DEBUG: " + package['name'])
-      print("DEBUG: --------------------------")
-
-
-    #update = {'$set': {'status': 'sourcedownloaded'}}
-    #packages.update_one(query, update)
-    print(f"Downloaded source for {package['name']} {package['version']}")
 
 
 
