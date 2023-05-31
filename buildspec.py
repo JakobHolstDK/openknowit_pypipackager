@@ -29,3 +29,4 @@ if __name__ == "__main__":
   for package in packages.find(query):
     print(package['name'])
     print(package['version'])
+    
