@@ -26,3 +26,6 @@ def filenames(mypath):
 if __name__ == "__main__":
   query = {'sourcedownloaded': True, 'sourceunpacked': True, 'specfilecreated': False}
   packages = db['pypi_packages']
+  for package in packages.find(query):
+    print(package['name'])
+    print(package['version'])
