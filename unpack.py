@@ -109,9 +109,9 @@ if __name__ == "__main__":
             packages.update_one(query, update)
             after = filenames(download_folder)
             dif = diflist(before, after)
-            filesadded = []
+            filesadded = ""
             for file in dif:
-              filesadded.append(file) 
+              filesadded  = filesadded + file + " "
             update = {'$set': {'status': 'sourceunpacked', 'sourceunpacked': True, 'sourcepath': filesadded}}
             packages.update_one(query, update)
 
