@@ -36,6 +36,8 @@ with open('requirements.txt') as f:
             'pyprojecttoml': False,
             'sourcedownloaded': False,
             'sourceunpacked': False,
+            'originalspecfile': False,
+            'originalrpmbuild': False,
             'specfile': "",
             'specfilecreated': False,
             'rpmbuild': False,
