@@ -29,4 +29,13 @@ if __name__ == "__main__":
   for package in packages.find(query):
     print(package['name'])
     print(package['version'])
-    
+    print(package['sourcepath'])
+    downloadpath = os.getenv("DOWNLOADPATH")
+    downloadpath = downloadpath + "/" + package['name'] + "-" + package['version']
+    print(downloadpath)
+    if os.path.exists(downloadpath):
+      print("Directory exists")
+    else:
+      print("Directory does not exist")
+      
+
