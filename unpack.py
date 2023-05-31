@@ -112,7 +112,7 @@ if __name__ == "__main__":
             filesadded = []
             for file in dif:
               filesadded.append(file)
-            update = {'$set': {'status': 'sourceunpacked', 'sourceunpacked': True, 'sourcepath': str(filesadded)}}
+            update = {'$set': {'status': 'sourceunpacked', 'sourceunpacked': True, 'sourcepath': filesadded}}
             packages.update_one(query, update)
 
 
