@@ -87,7 +87,7 @@ def unpack_whl_file(filename):
       
 
 if __name__ == "__main__":
-  query = {'sourcedownloaded': False}
+  query = {'sourcedownloaded': True, 'sourceunpacked': False}
   packages = db['pypi_packages']
   download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
   for file in filenames(download_folder):

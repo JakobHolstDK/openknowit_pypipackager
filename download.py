@@ -168,7 +168,6 @@ while not emptyq:
     emptyq = True
   else:
     print("We have %d packages to download" % queudepth)
-    print("Sleeping for 5 seconds")
     for package in packages.find(query):
       downloads = downloadpypipackage(package['name'], package['version'])
       for download in downloads:
