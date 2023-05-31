@@ -145,11 +145,12 @@ def downloadpypipackage(name, version):
             pass
   return downloads
 
+print("Starting download")
 
 emptyq = False  
 while emptyq:
   print("Checking for empty packages")
-  
+
   query = {'sourcedownloaded': False}
   packages = db['pypi_packages']
   print("we have %d number of downloads missing" % len(packages))
