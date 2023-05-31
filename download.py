@@ -154,27 +154,27 @@ while not emptyq:
   query = {'sourcedownloaded': False}
   packages = db['pypi_packages']
   packmeta = {}
-
+  queudepth = 0  
   for package in packages.find(query):
     packmeta[package['name']] = package['version']
     print(package['name'])
     print(package['version'])
     print(package['sourcedownloaded'])
+    if package['sourcedownloaded'] == False:
+      queudepth = queudepth + 1
 
-  
-  print("we have %d number of downloads missing" % len(packages))
-  if len(packages) > 0:
-    print("we have %d number of downloads missing" % len(packages))
 
-  
-  for package in packages.find(query):
-    print(package)
-
-    downloads = downloadpypipackage(package['name'], package['version'])
-    for download in downloads:
-      query = {'name': package['name'], 'version': package['version']}
-      update = {'$push': {'downloads': download}}
-      packages.update_one(query, update)
+  if queudepth == 0:
+    emptyq = True
+  else:
+    print("We have %d packages to download" % queudepth)
+    print("Sleeping for 5 seconds")
+    for package in packages.find(query):
+      downloads = downloadpypipackage(package['name'], package['version'])
+      for download in downloads:
+        query = {'name': package['name'], 'version': package['version']}
+        update = {'$push': {'downloads': download}}
+        packages.update_one(query, update)
 
 
 
