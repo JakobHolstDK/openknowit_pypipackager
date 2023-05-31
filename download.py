@@ -105,16 +105,18 @@ def downloadpypipackage(name, version):
   before = filenames(download_folder)
   process = subprocess.run(["pip", "download", '--no-binary' , ':all:',  "-d", download_folder, package_name], capture_output=True, text=True)
   if process.returncode == 0:
-    query = {'name': name, 'version': version}
-    update = {'$set': {'sourcedownloaded': True, 'status': "Source downloaded"}, }
-    packages.update_one(query, update)
-    print(f"Downloaded source for {name} {version}")
-  else:
-    print(f"Error downloading source for {name} {version}")
-    print(process.stderr)
-    query = {'name': name, 'version': version}
-    update = {'$set': {'sourcedownloaded': False, 'status': "Error downloading source"}, }
-    packages.update_one(query, update)
+    process2 = subprocess.run(["pip", "download", '--no-binary' , ':all:',  "-d", destination_folder, package_name], capture_output=True, text=True)
+    if process2.returncode == 0:
+      query = {'name': name, 'version': version}
+      update = {'$set': {'sourcedownloaded': True, 'status': "Source downloaded"}, }
+      packages.update_one(query, update)
+      print(f"Downloaded source for {name} {version}")
+    else:
+      print(f"Error downloading source for {name} {version}")
+      print(process.stderr)
+      query = {'name': name, 'version': version}
+      update = {'$set': {'sourcedownloaded': False, 'status': "Error downloading source"}, }
+      packages.update_one(query, update)
     
 
 
@@ -126,10 +128,7 @@ def downloadpypipackage(name, version):
     if newpackage == name:
       continue
     downloads.append({'filename': i, 'package': newpackage, 'version': newversion})
-
     parent = name + '==' + version
-
-
     for download in downloads:
       query = {'name': download['package'], 'version': download['version']}
       package = packages.find_one(query)
