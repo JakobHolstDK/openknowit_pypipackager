@@ -34,10 +34,22 @@ if __name__ == "__main__":
     downloadpath = os.getenv("DOWNLOAD_FOLDER")
     downloadpath = downloadpath + myname + "-" + myversion
 
-    print(downloadpath)
     if os.path.exists(downloadpath):
       print("Directory exists")
-    else:
+      os.chdir(downloadpath)
+      print("Changed directory")
+      os.system('python3 setup.py sdist')
+      print("Ran setup.py")
+      os.chdir(downloadpath + "/dist")
+      print("Changed directory")
+      files = filenames(downloadpath + "/dist")
+      for file in files:
+        if file.endswith(".tar.gz"):
+          tarfile = file
+          print(tarfile)
+          break
+    else: 
+      
       print("Directory does not exist")
       
 
