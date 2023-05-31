@@ -148,6 +148,8 @@ def downloadpypipackage(name, version):
 
 emptyq = False  
 while emptyq:
+  print("Checking for empty packages")
+  
   query = {'sourcedownloaded': False}
   packages = db['pypi_packages']
   print("we have %d number of downloads missing" % len(packages))
@@ -157,7 +159,7 @@ while emptyq:
   
   for package in packages.find(query):
     print(package)
-    
+
     downloads = downloadpypipackage(package['name'], package['version'])
     for download in downloads:
       query = {'name': package['name'], 'version': package['version']}
