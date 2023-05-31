@@ -156,6 +156,8 @@ while emptyq:
 
   
   for package in packages.find(query):
+    print(package)
+    
     downloads = downloadpypipackage(package['name'], package['version'])
     for download in downloads:
       query = {'name': package['name'], 'version': package['version']}
