@@ -31,8 +31,9 @@ if __name__ == "__main__":
     myversion = package['version']
     print(myname)
     print(myversion)
-    downloadpath = "/home/centos/rpmbuild/SOURCES/" + myname + "-" + myversion
-    
+    downloadpath = os.getenv("DOWNLOAD_FOLDER")
+    downloadpath = downloadpath + myname + "-" + myversion
+
     print(downloadpath)
     if os.path.exists(downloadpath):
       print("Directory exists")
