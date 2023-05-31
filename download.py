@@ -153,6 +153,14 @@ while not emptyq:
 
   query = {'sourcedownloaded': False}
   packages = db['pypi_packages']
+  packmeta = {}
+
+  for package in packages.find(query):
+    packmeta[package['name']] = package['version']
+    print(package['name'])
+    print(package['version'])
+    print(package['sourcedownloaded'])
+
   
   print("we have %d number of downloads missing" % len(packages))
   if len(packages) > 0:
