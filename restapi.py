@@ -11,7 +11,7 @@ db = client['pypi-packages']
 pypipackages = db['pypi_packages']
 print(json.loads(json_util.dumps(pypipackages.find())))
 
-#pypipackager.delete_many({})
+#pypipackages.delete_many({})
 
 
 
