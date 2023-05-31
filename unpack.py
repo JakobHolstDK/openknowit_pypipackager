@@ -123,11 +123,14 @@ if __name__ == "__main__":
         if unpack_gz_file(file):
           print("Unpacked gz file")
           query = {'name': name, 'version': version}
-          update = {'$set': {'status': 'sourceunpacked'}}
+          update = {'$set': {'status': 'sourceunpacked', 'sourceunpacked': True }}
           packages.update_one(query, update)
 
       if file.endswith('.zip'):
         if unpack_zip_file(file):
           print("Unpacked zip file")
+          query = {'name': name, 'version': version}
+          update = {'$set': {'status': 'sourceunpacked', 'sourceunpacked': True }}
+          packages.update_one(query, update)
 
  
