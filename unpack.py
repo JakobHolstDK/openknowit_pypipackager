@@ -90,6 +90,7 @@ if __name__ == "__main__":
   query = {'sourcedownloaded': True, 'sourceunpacked': False}
   packages = db['pypi_packages']
   download_folder = os.getenv('DOWNLOAD_FOLDER', '/tmp')
+  before = filenames(download_folder)
   for file in filenames(download_folder):
     name = file.replace('.tar.gz', '')[::-1].split('-', 1)[-1][::-1]
     version = file.replace('.tar.gz', '')[::-1].split('-', 1)[0][::-1]
@@ -106,6 +107,15 @@ if __name__ == "__main__":
             query = {'name': name, 'version': version}
             update = {'$set': {'status': 'sourceunpacked', 'sourceunpacked': True}}
             packages.update_one(query, update)
+            after = filenames(download_folder)
+            dif = diflist(before, after)
+            filesadded = []
+            for file in dif:
+              filesadded.append(file) 
+            update = {'$set': {'status': 'sourceunpacked', 'sourceunpacked': True, 'sourcepath': filesadded}}
+            packages.update_one(query, update)
+
+
 
         if file.endswith('.zip'):
           if unpack_zip_file(file):
