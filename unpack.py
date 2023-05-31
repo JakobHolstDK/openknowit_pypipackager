@@ -110,6 +110,9 @@ if __name__ == "__main__":
         if file.endswith('.zip'):
           if unpack_zip_file(file):
             print("Unpacked zip file")
+            query = {'name': name, 'version': version}
+            update = {'$set': {'status': 'sourceunpacked'}}
+            packages.update_one(query, update)
         continue
     else:
       print("Registering package")
