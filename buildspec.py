@@ -30,7 +30,7 @@ if __name__ == "__main__":
     myname = package['name']
     myversion = package['version']
     downloadpath = os.getenv("DOWNLOADPATH")
-    downloadpath = downloadpath + "/" + myname + "-" + myversion
+    downloadpath = downloadpath + "/" + str(myname) + "-" + str(myversion)
     print(downloadpath)
     if os.path.exists(downloadpath):
       print("Directory exists")
