@@ -27,11 +27,10 @@ if __name__ == "__main__":
   query = {'sourcedownloaded': True, 'sourceunpacked': True, 'specfilecreated': False}
   packages = db['pypi_packages']
   for package in packages.find(query):
-    print(package['name'])
-    print(package['version'])
-    print(package['sourcepath'])
+    myname = package['name']
+    myversion = package['version']
     downloadpath = os.getenv("DOWNLOADPATH")
-    downloadpath = downloadpath + "/" + package['name'] + "-" + package['version']
+    downloadpath = downloadpath + "/" + myname + "-" + myversion
     print(downloadpath)
     if os.path.exists(downloadpath):
       print("Directory exists")
